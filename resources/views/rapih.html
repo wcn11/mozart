@@ -1,0 +1,16 @@
+@extends('master.layouts.app') @section('main-content')
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card">
+            <div class="wrapper">
+
+
+                @for ($i = 0; $i
+                < $soal_judul->jumlah_soal; $i++) {{ $i +1 }}. {{ $soal[$i]['pertanyaan']}}
+                    <br><br> 1 .{{ $soal[$i]['pilihan1']}}<br> 2. {{ $soal[$i]['pilihan2']}}<br> 3. {{ $soal[$i]['pilihan3']}}<br> 4. {{ $soal[$i]['pilihan4']}}<br> 5. {{ $soal[$i]['pilihan5']}}<br> Pilihan benar : {{ $soal[$i]['pilihan_benar']}}<br><br>                    @endfor
+            </div>
+        </div>
+    </div>
+
+</div>
+@endsection
