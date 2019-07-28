@@ -25,11 +25,11 @@
             <div class="card-body">
 
                 @for($i = 0; $i < $soal_judul->jumlah_soal; $i++)
-                
+
                     <?php $id = Crypt::encrypt($soal[$i]['id']); $nomor = $i+1; ?>
-                    
-                    {{ $nomor }}. {{ $soal[$i]['pertanyaan'] }} <br>
-                    
+
+                    {{ $nomor }}. {!! $soal[$i]['pertanyaan'] !!} <br>
+
                     <a class="btn btn-primary float-right mr-3" href="{{ route('student.soal_edit_persoal', [$id , $nomor]) }}">edit</a>
 
                     @if($hasil[$i]['jawaban'] == 1)
@@ -48,7 +48,7 @@
                     <div class="mt-3 invisible">kosong</div>
                     <hr>
                 @endfor
-            
+
             </div>
         </div>
     </div>

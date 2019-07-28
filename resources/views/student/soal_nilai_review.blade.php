@@ -19,7 +19,7 @@
                 <p class="text-dark float-left"><i class="fas fa-calendar-check"></i> Jumlah Soal : {{ $soal_judul->jumlah_soal }}</p>
                 <br>
                 <div class="row justify-content-end">
-                    
+
                     <a class="btn btn-info btn-md btn-selesai text-white m-2" href="{{ route('student.soal_nilai_cetak', $soal_judul->kode_judul_soal) }}"><i class="fas fa-print"></i> Cetak</a>
 
                     <a class="btn btn-secondary text-white m-2" href="{{ route('student.soal') }}"><i class="fas fa-stream"></i> Kembali</a>
@@ -31,10 +31,10 @@
             <div class="card-body">
 
                 @for($i = 0; $i < $soal_judul->jumlah_soal; $i++)
-                
+
                     <?php $id = Crypt::encrypt($soal[$i]['id']); $nomor = $i+1; ?>
-                    
-                    {{ $nomor }}. {{ $soal[$i]['pertanyaan'] }} <br>
+
+                    {{ $nomor }}. {!! $soal[$i]['pertanyaan'] !!} <br>
 
                     @if($jumlah_jawaban <= $i)
                         <div class="p-2">Belum memilih</div>

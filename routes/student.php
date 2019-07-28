@@ -20,24 +20,27 @@ Route::group(['namespace' => 'Student'], function () {
     Route::get('email/resend', 'Auth\VerificationController@resend')->name('student.verification.resend');
     Route::get('email/verify', 'Auth\VerificationController@show')->name('student.verification.notice');
     Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('student.verification.verify');
-    
-    Route::post("mentor/ambildata", "MentorController@ambildata");
-    Route::post("mentor/ambildatafull", "MentorController@ambildatafull");
-    Route::get("mentor/ikuti/{id}", "MentorController@ikuti")->name("student.ikuti_mentor");
-    Route::post("mentor/unfollow/{id}", "MentorController@unfollow")->name("student.unfollow");
+
+    Route::post("mentor/ambildata", "MentorController@ambildata")->middleware("student.status_soal");
+    Route::get("mentor/mapel/{id}", "MentorController@mapel_mentor")->name("student.mapel_mentor")->middleware("student.status_soal");
+    Route::post("mentor/ambildatafull", "MentorController@ambildatafull")->middleware("student.status_soal");
+    Route::get("mentor/ikuti/{id}", "MentorController@ikuti")->name("student.ikuti_mentor")->middleware("student.status_soal");
+    Route::post("mentor/unfollow/{id}", "MentorController@unfollow")->name("student.unfollow")->middleware("student.status_soal");
+    Route::get("mentor/ambilkelas/{id_mentor}/{id_kelas}", "MentorController@ambil_kelas")->name('student.ambil_kelas')->middleware("student.status_soal");
+    Route::get("mentor/unfollow/{ksp}", "MentorController@unfollow")->name('student.unfollow')->middleware("student.status_soal");
 
     Route::get("redirect/{driver}", "Auth\LoginController@redirectToProvider")->name("login.student.provider");
     Route::get('{driver}/callback', 'Auth\LoginController@handleProviderCallback')->name('login.student.callback');
 
-    Route::get("mentor", "MentorController@index")->name("student.mentor")->middleware('student.auth', 'student.verified');
+    Route::get("mentor", "MentorController@index")->name("student.mentor")->middleware('student.auth', 'student.verified', "student.status_soal");
     // Students
     Route::group(['middleware' => ['student.auth', 'student.verified', "student.cek_mengikuti"]], function () {
 
-        Route::post('/password/change', 'HomeController@changePassword')->name('mentor.password.change');
-        
-        Route::get('/', 'HomeController@index')->name('student.dashboard');
+        Route::post('/password/change', 'HomeController@changePassword')->name('mentor.password.change')->middleware("student.status_soal");
+
+        Route::get('/', 'HomeController@index')->name('student.dashboard')->middleware("student.status_soal");;
         Route::get("profil", "HomeController@profil")->name('student.profil')->middleware("student.status_soal");
-        Route::post("profil/update", "HomeController@profil_update")->name('student.profil_update');
+        Route::post("profil/update", "HomeController@profil_update")->name('student.profil_update')->middleware("student.status_soal");;
 
         Route::get('materi', "MateriController@materi")->name('student.materi')->middleware("student.status_soal");
         Route::get('daftar_materi/{id}', "MateriController@daftar_materi")->name('student.daftar_materi')->middleware("student.status_soal");
@@ -47,8 +50,8 @@ Route::group(['namespace' => 'Student'], function () {
 
         Route::post('soal/nilai/{id}/{id_param}', 'SoalController@soal_nilai')->name('student.soal_nilai');
         Route::get('soal/nilai/review/{id}/{id_param}', 'SoalController@soal_nilai_review')->name('student.nilai_review')->middleware("student.batas_waktu");
-        
-        Route::group(['middleware' => ['student.batas_waktu' , 'student.cek_selesai']], function(){
+
+        Route::group(['middleware' => ['student.batas_waktu', 'student.cek_selesai']], function () {
             Route::get('soal/mengerjakan/{id}/{id_param}', 'SoalController@soal_mengerjakan')->name('student.soal_mengerjakan');
             Route::get('soal/hasil/{id}', 'SoalController@soal_hasil')->name('student.soal_hasil');
             Route::get('soal/edit/{id}/{id_param}', 'SoalController@soal_edit')->name('student.soal_edit');
@@ -63,7 +66,7 @@ Route::group(['namespace' => 'Student'], function () {
 
         Route::get('soal/nilai/cetak/{id}', 'SoalController@soal_nilai_cetak')->name('student.soal_nilai_cetak');
 
-        Route::get('soal/mengerjakan/{id}/{id_param}/callback', function(){
+        Route::get('soal/mengerjakan/{id}/{id_param}/callback', function () {
             return redirect()->route("student.soal");
         });
     });

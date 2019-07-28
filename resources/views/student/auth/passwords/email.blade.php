@@ -21,13 +21,13 @@
 </style>
 	<body>
 
-		<div class="wrapper">
-			<div class="inner">
+		<div class="wrapper bg-student">
+			<div class="inner" style="position:relative; left:20%; bottom: 20px;">
 				<div class="image-holder" style="padding: 50px;">
-                    <img src="{{ url('logreg/images/admin.jpg') }}">
+                    <img src="{{ url('logreg/images/icon-student.png') }}">
         </div>
         @if (session('status'))
-                        <div class="alert alert-success" role="alert">
+                        <div class="alert alert-success" style="margin:10px" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
@@ -72,7 +72,7 @@
   'error'
 )
         }else{
-          
+
     Swal.fire(
   'Terkirim!',
   'Email reset password telah dikirim!',

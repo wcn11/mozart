@@ -27,11 +27,11 @@
             <div class="card-body">
 
                 @for($i = 0; $i < $soal_judul->jumlah_soal; $i++)
-                
+
                     <?php $id = Crypt::encrypt($soal[$i]['kode_soal']); $nomor = $i+1; ?>
-                    
-                    {{ $nomor }}. {{ $soal[$i]['pertanyaan'] }} <br>
-                    
+
+                    {{ $nomor }}. {!! $soal[$i]['pertanyaan'] !!} <br>
+
                     <a class="btn btn-primary float-right mr-3" href="{{ route('student.soal_edit_persoal', [$id , $nomor, $id_param = Crypt::encrypt($soal_judul->kode_judul_soal)]) }}">edit</a>
 
                     @if($hasil[$i]['jawaban'] == 1)
@@ -50,7 +50,7 @@
                     <div class="mt-3 invisible">kosong</div>
                     <hr>
                 @endfor
-            
+
             </div>
         </div>
     </div>
@@ -65,7 +65,7 @@
     $(document).ready(function(){
 
         $(".btn-selesai").click(function(){
-            
+
 
             Swal.fire({
                 title: 'Apakah anda yakin telah selesai?',

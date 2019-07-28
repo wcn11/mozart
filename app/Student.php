@@ -27,7 +27,7 @@ class Student extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'id_student','name', 'email', 'password', "socialite_id", "socialite_name", "foto"
+        'id_student', 'name', 'email', 'password', "socialite_id", "socialite_name", "foto"
     ];
 
     /**
@@ -71,7 +71,7 @@ class Student extends Authenticatable implements MustVerifyEmail
 
     public function mentor()
     {
-        return $this->belongsToMany('App\Mentor',"App\Mentors_student", "id_student", "id_mentor");
+        return $this->belongsToMany('App\Mentor', "App\Mentors_student", "id_student", "id_mentor");
     }
     // public function mentors_student()
     // {
@@ -86,5 +86,10 @@ class Student extends Authenticatable implements MustVerifyEmail
     public function pelajaran()
     {
         return $this->belongsToMany('App\Pelajaran', "App\Pelajaran_student", "id_student", "kode_mapel");
+    }
+
+    public function s_ke_ms()
+    {
+        return $this->hasMany('App\Pelajaran_student', "id_student");
     }
 }

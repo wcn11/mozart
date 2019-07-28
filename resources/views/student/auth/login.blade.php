@@ -7,6 +7,7 @@
 
 		<!-- STYLE CSS -->
 		<link rel="stylesheet" href="{{ asset('logreg/css/style.css')}}">
+		<link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
 	</head>
 <style>
     image-holder{
@@ -21,11 +22,12 @@
 </style>
 	<body>
 
-		<div class="wrapper">
-			<div class="inner">
+		<div class="wrapper bg-student">
+			<div class="inner" style="position:relative; left:20%; bottom: 20px;">
 				<div class="image-holder" style="padding: 50px;">
-                    <img src="{{ url('logreg/images/admin.jpg') }}">
+                    <img src="{{ url('logreg/images/icon-student.png') }}">
 				</div>
+
                 <form method="POST" class="login100-form validate-form" action="{{ route('student.login') }}" aria-label="{{ __('Login') }}">
                     @csrf
 					<h3>Login Student</h3>
@@ -50,7 +52,7 @@
 					<div class="checkbox">
 					</div>
 					<div class="form-login">
-						<button>Login</button>
+						<button class="p-1"><i class="fas fa-sign-in-alt"></i> Login</button>
 							<a href="{{route('student.register')}}" class="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30">
 								Daftar
 								<i class="fa fa-long-arrow-right m-l-5"></i>
@@ -59,10 +61,18 @@
 									Lupa password
 									<i class="fa fa-long-arrow-right m-l-5"></i>
 								</a>
-								<a href="{{ route('login.student.provider', 'google') }}" class="btn btn-danger">{{ __('Google Sign in') }}</a>
-								<a href="{{ route('login.student.provider', 'facebook') }}" class="btn btn-danger">{{ __('Facebook Sign in') }}</a>
-					</div>
-					
+
+								<br>
+							</div>
+							<hr>
+									<div style="margin:10px; text-align:center; padding: 5px;">
+										<a href="{{ route('login.student.provider', 'google') }}"  style="font-size:20px; margin:5px; border:1px solid red; padding:5px; border-radius:10px 10px;"><i class="fab fa-google-plus-g"></i> Gmail</a>
+										<a href="{{ route('login.student.provider', 'facebook') }}"  style="font-size:20px; margin:5px; border:1px solid red; padding:5px; border-radius:10px 10px;"><i class="fab fa-facebook-square"></i> Facebook</a>
+									</div>
+
+									<p style="padding:10px;text-align:right;">Seorang mentor ?<a href="{{ route('mentor.login') }}">klik disini</a></p>
+
+
 				</form>
 			</div>
 		</div>

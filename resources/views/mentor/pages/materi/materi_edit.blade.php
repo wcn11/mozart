@@ -9,7 +9,7 @@
     <p class="mb-4">Posting  apapun tentang pengetahuan anda, dan biarkan seluruh dunia melihat karyamu lewat materi ini.</p>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-            <form class="form" action="{{ route('mentor.materi_update') }}" class="col-md-12" method="POST">
+            <form class="form" action="{{ route('mentor.materi_update') }}" class="col-md-12" method="POST"  enctype="multipart/form-data">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-info">Murid</h6>
         </div>
@@ -39,12 +39,19 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-info text-white">Kategori pelajaran</span>
                                         </div>
-                                        <select class="custom-select" name="kode_mapel" required>
-                                                @foreach ($pelajaran as $p)
-                                                <option value="{{ $p->kode_mapel }}" {{ $m->pelajaran['id'] === $p->kode_mapel ? "selected='selected'" : '' }}>{{ $p->nama_pelajaran }}</option>
-                                            @endforeach
-                                        </select>
+                                        {{ $m->mapel_ke_materi->nama_pelajaran }}
+                                        <input type="hidden" name="kode_mapel" value="{{ $m->mapel_ke_materi->kode_mapel }}">
                                     </div>
+                                    <div class="col-md-12 mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-info text-white">Cover</span>
+                                        </div>
+                                        <input type='file' name="cover" id="cover" />
+                                        <img id="image_upload_preview" src="{{ url('/images/cover_materi/', $m->cover) }}"  class="rounded gambar w-50" />
+                                        {{--  <input type='file' name="cover" value="{{$p->cover}}" class="fom-control w-100 text-center text-white" id="inputFile" style="background-color:#4dbea5; padding:20px; border-radius:25px;" />
+                                        <img id="image_upload_preview" src="{{ url(''.$p->cover) }}" class="rounded gambar border-success border border-20" alt="Cover" />  --}}
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -64,8 +71,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-info text-white">Tanggal Update</span>
                                         </div>
-                                        <input type="text" class="form-control" id="tanggal"
-                                             required readonly>
+                                        <input type="text" class="form-control" id="tanggal" required readonly>
                                     </div>
                                 </div>
                             </div>
@@ -104,6 +110,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.js"></script>
 <script>
     $(document).ready(function () {
+
+        function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#image_upload_preview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#cover").change(function () {
+            readURL(this);
+        });
+
         $('#summernote').summernote({
             placeholder: "Masukkan materi",
             height: 500, // set editor height

@@ -10,140 +10,143 @@
     <p class="mb-4">Murid yang ada pada daftar dibawah adalah murid yang mengikuti anda dan anda dapat <span class="badge badge-danger">mengeluarkan</span> murid anda.</p>
     <div class="col text-right mb-3 mt-3">
 
-        <button class="btn btn-dark btn-buat-soal"> Buat soal</button>
+        {{--  <button class="btn btn-dark btn-buat-soal"> Buat soal</button>  --}}
     </div>
 
-    <div class="card shadow mb-4 form-buat-soal">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Buat soal</h6>
-        </div>
 
-        <div class="card-body">
-            <div class="table-responsive w-100" style="overflow:hidden;">
-                <form class="form form-tambah-soal" action="{{ route('mentor.question_create_title') }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="judul">Judul Soal<span class="text-danger">*</span></label>
-                        <input type="text" name="judul" class="form-control" value="{{ old('judul') }}" placeholder="contoh : Quiz pengenalan ekologi sistem pangan" required>
-                        <div class="invalid-feedback invalid-judul">
-                                Harap isi judul soal.
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            @foreach($mentor->m_ke_mp as $m_key => $m_value)
+                <a class="nav-item nav-link" id="nav-{{ $m_value->kode_mentor_pelajaran }}-tab" data-toggle="tab" href="#nav-{{ $m_value->kode_mentor_pelajaran }}">{{ $m_value->mp_ke_mapel->nama_pelajaran }}</a>
+            @endforeach
+        </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent p-4">
+          @foreach ($mentor->m_ke_mp as $m_key => $m_value)
+            <div class="tab-pane fade" id="nav-{{ $m_value->kode_mentor_pelajaran }}" role="tabpanel">
+
+                <div class="p-2 text-center">
+                    <button type="button" class="btn btn-info btn-buat-soal m-3" data-id="{{ $m_value->kode_mentor_pelajaran }}"><i class="fas fa-plus"></i> Buat soal</button>
+                </div>
+
+                <div class="card shadow mb-4 form-buat-soal">
+
+                        <div class="card-body">
+                            <div class="table-responsive w-100" style="overflow:hidden;">
+
+
+                                <form class="form form-tambah-soal-{{ $m_value->kode_mentor_pelajaran }}" action="{{ route('mentor.question_create_title') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="kode_mentor_pelajaran" value="{{ $m_value->kode_mentor_pelajaran }}">
+                                    <div class="form-group">
+                                        <label for="judul">Judul Soal<span class="text-danger">*</span></label>
+                                        <input type="text" name="judul" class="form-control judul-{{ $m_value->kode_mentor_pelajaran }}" value="{{ old('judul') }}" placeholder="contoh : Quiz pengenalan ekologi sistem pangan" required>
+                                        <div class="invalid-feedback invalid-judul">
+                                                Harap isi judul soal.
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kode_mapel">Mata Pelajaran<span class="text-danger">*</span></label>
+                                        <br>
+                                        <span class="badge badge-success p-2">{{ $m_value->mp_ke_mapel->nama_pelajaran }}</span>
+                                        <input type="hidden" name="kode_mapel" value="{{ $m_value->kode_mapel }}" class="kode_mapel-{{ $m_value->kode_mentor_pelajaran }}">
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Jumlah soal<span class="text-danger">*</span></label>
+                                        <span id="pesan_error" class="text-danger"></span>
+                                        <input type="number" name="jumlah_soal" class="form-control jumlah_soal-{{ $m_value->kode_mentor_pelajaran }}" min="5" max="20" value="5" id="jumlah_soal">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Waktu mengerjakan<span class="text-danger">*</span></label>
+                                        <span id="pesan_error_waktu" class="text-danger"></span>
+                                        <br>
+                                        <p class="font-italic text-grey">Masukkan Waktu, Tanggal mulai dan batas waktu</p>
+
+                                        <div class="row">
+                                            <div class="input-group mb-2 col-xs-12 col-sm-6 col-md-3" data-toggle="tooltip" data-placement="top" title="Tanggal mulai">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text bg-info text-white"> <i class="fas fa-calendar-alt"></i></div>
+                                                </div>
+                                                <input type="date" name="tanggal_mulai" class="form-control tanggal_mulai-{{ $m_value->kode_mentor_pelajaran }}" placeholder="tanggal mulai" required><br>
+
+                                            </div>
+
+                                            <div class="input-group mb-2 col-xs-12 col-sm-6 col-md-3" data-toggle="tooltip" data-placement="top" title="Jam mulai">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text bg-info text-white"> <i class="fas fa-clock"></i></div>
+                                                </div>
+                                                <input type="text" name="jam_mulai" class="form-control clockpicker jam_mulai-{{ $m_value->kode_mentor_pelajaran }}" data-placement="bottom" placeholder="waktu mulai" data-autoclose="true" readonly required>
+                                            </div>
+
+                                            <div class="input-group mb-2 col-xs-12 col-sm-6 col-md-3" data-toggle="tooltip" data-placement="top" title="Tanggal selesai">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text bg-info text-white"> <i class="fas fa-calendar-day"></i></div>
+                                                </div>
+                                                <input type="date" name="tanggal_selesai" class="form-control tanggal_selesai-{{ $m_value->kode_mentor_pelajaran }}" placeholder="tanggal selesai" required>
+                                            </div>
+
+                                            <div class="input-group mb-2 col-xs-12 col-sm-6 col-md-3" data-toggle="tooltip" data-placement="top" title="Jam selesai">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text bg-info text-white"> <i class="fas fa-stopwatch"></i></div>
+                                                </div>
+                                                <input type="text" name="jam_selesai" class="form-control clockpicker jam_selesai-{{ $m_value->kode_mentor_pelajaran }}" data-placement="bottom" placeholder="waktu selesai" data-autoclose="true" readonly required>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-info btn-tambah-soal" type="button" data-id="{{ $m_value->kode_mentor_pelajaran }}"><i class="fas fa-plus"></i> submit</button>
+                                    </div>
+
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="kode_mapel">Mata Pelajaran<span class="text-danger">*</span></label>
-                        <select class="form-control" name="kode_mapel"  value="{{ old('kode_mapel') }}" required>
-                            @foreach ($pelajaran as $p)
-                            <option value="{{ $p->kode_mapel }}">{{ $p->nama_pelajaran }}</option>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="tabel-{{ $m_key }}">
+                        <thead>
+                            <tr style="text-align:center;">
+                                <th>Judul</th>
+                                <th>Pelajaran</th>
+                                <th><sup>Jumlah </sup>Soal</th>
+                                <th><sup>Tanggal </sup>Mulai</th>
+                                <th><sup>Tanggal </sup>Selesai</th>
+                                <th>Dibuat</th>
+                                <th>Diupdate</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($m_value->mp_ke_js as $mpks)
+                                <tr class="text-center">
+                                    <td>{{ $mpks->judul }}</td>
+                                    <td>{{ $mpks->mapel_ke_soal->nama_pelajaran }}</td>
+                                    <td>{{ $mpks->jumlah_soal }}</td>
+                                    <td>{{ $mpks->tanggal_mulai }}</td>
+                                    <td>{{ $mpks->tanggal_selesai }}</td>
+                                    <td>{{ $mpks->dibuat }}</td>
+                                    <td>{{ $mpks->diupdate }}</td>
+                                    <td>
+                                        <a class="btn btn-warning btn-edit" href="{{ route('mentor.soal_edit',$mpks->kode_judul_soal) }}"><i class="fas fa-eye"></i> edit</a>
+                                        <button class="btn btn-danger btn-hapus" data-id="{{ $mpks->kode_judul_soal }}"><i class="fas fa-trash"></i> hapus</button>
+                                        <button class="btn btn-success btn-modal-edit-judul" data-id="{{ $mpks->kode_judul_soal }}"><i class="fas fa-tint-slash"></i> edit judul</button>
+                                        <form action="{{ route('mentor.hapus_soal', $mpks->kode_judul_soal) }}" class="form-hapus-{{ $mpks->kode_judul_soal }}" method="POST">
+                                            @csrf
+                                        </form>
+                                    </td>
+                                </tr>
                             @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Jumlah soal<span class="text-danger">*</span></label>
-                        <span id="pesan_error" class="text-danger"></span>
-                        <input type="number" name="jumlah_soal" class="form-control" min="5" max="20" value="5" id="jumlah_soal">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Waktu mengerjakan<span class="text-danger">*</span></label>
-                        <span id="pesan_error_waktu" class="text-danger"></span>
-                        <br>
-                        <p class="font-italic text-grey">Masukkan Waktu, Tanggal mulai dan batas waktu</p>
-
-                        <div class="row">
-                            <div class="input-group mb-2 col-xs-12 col-sm-6 col-md-3" data-toggle="tooltip" data-placement="top" title="Tanggal mulai">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-info text-white"> <i class="fas fa-calendar-alt"></i></div>
-                                </div>
-                                <input type="date" name="tanggal_mulai" class="form-control" placeholder="tanggal mulai" required><br>
-
-                            </div>
-
-                            <div class="input-group mb-2 col-xs-12 col-sm-6 col-md-3" data-toggle="tooltip" data-placement="top" title="Jam mulai">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-info text-white"> <i class="fas fa-clock"></i></div>
-                                </div>
-                                <input type="text" name="jam_mulai" class="form-control clockpicker" data-placement="bottom" placeholder="waktu mulai" data-autoclose="true" readonly required>
-                            </div>
-
-                            <div class="input-group mb-2 col-xs-12 col-sm-6 col-md-3" data-toggle="tooltip" data-placement="top" title="Tanggal selesai">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-info text-white"> <i class="fas fa-calendar-day"></i></div>
-                                </div>
-                                <input type="date" name="tanggal_selesai" class="form-control" placeholder="tanggal selesai" required>
-                            </div>
-
-                            <div class="input-group mb-2 col-xs-12 col-sm-6 col-md-3" data-toggle="tooltip" data-placement="top" title="Jam selesai">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text bg-info text-white"> <i class="fas fa-stopwatch"></i></div>
-                                </div>
-                                <input type="text" name="jam_selesai" class="form-control clockpicker" data-placement="bottom" placeholder="waktu selesai" data-autoclose="true" readonly required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="button" class="btn btn-info btn-tambah-soal">Buat soal</button>
-                </form>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
-<!-- DataTales Example -->
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Murid</h6>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive w-100">
-            <table class="table table-bordered" id="tabel" width="100%" cellspacing="0">
-                <thead>
-                    <tr style="text-align:center;">
-                        <th>Judul</th>
-                        <th>Pelajaran</th>
-                        <th><sup>Jumlah </sup>Soal</th>
-                        <th><sup>Tanggal </sup>Mulai</th>
-                        <th><sup>Tanggal </sup>Selesai</th>
-                        <th>Dibuat</th>
-                        <th>Diupdate</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if(empty($sj))
-                    <tr>
-                        <td colspan="7" style="text-align:center;">Anda belum membuat soal</td>
-                    </tr>
-                    @else
+          @endforeach
+      </div>
 
-                    @foreach ($sj as $s)
-                    <tr style="text-align:center;">
-                        <td style="width: 35%; text-align:left;">{{ $s->judul }}</td>
-                        <td>{{ $s->pelajaran->nama_pelajaran }}</td>
-                        <td>{{ $s->jumlah_soal }}</td>
-                        <td>{{ $s->tanggal_mulai }}</td>
-                        <td>{{ $s->tanggal_selesai }}</td>
-                        <td>{{ $s->dibuat }}</td>
-                        @if (empty($s->diupdate))
-                        <td> Belum pernah</td>
-                        @else
-                        <td>{{ $s->diupdate }}</td>
-                        @endif
-                        <td class="text-center">
-                        <button class="btn btn-danger btn-hapus" data-link="{{ url('mentor/soal/delete', $s->kode_judul_soal) }}">Hapus</button> |
-                            <a class="btn btn-info" href="{{ route('mentor.soal_edit', $s->kode_judul_soal) }}">Edit</a> |
-                            <button class="btn btn-outline-info btn-modal-edit-judul" data-toggle="modal" data-target=".modal-edit-judul" data-id="{{ $s->kode_judul_soal }}">Edit judul</button>
-                        </td>
-                    </tr>
-                    @endforeach
-                    @endif
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-</div>
 </div>
 
+{{-- <input type="text" class="jumlah_soal" value="{{ $mentor->m_ke_mp[0]->mp_ke_mapel->count() }}"> --}}
 
 {{--  MODAL  --}}
 
@@ -197,9 +200,9 @@
                         </div>
                         <div class="form-group">
                             <label for="kode_mapel">Mata Pelajaran<span class="text-danger">*</span></label>
-                            <select class="form-control" name="kode_mapel_update"  value="{{ old('kode_mapel_update') }}" required>
-                                @foreach ($pelajaran as $p)
-                                    <option value="{{ $p->kode_mapel }}">{{ $p->nama_pelajaran }}</option>
+                            <select class="form-control" name="kode_mentor_pelajaran_update"  value="{{ old('kode_mapel_update') }}" required>
+                                @foreach ($mentor->m_ke_mp as $p)
+                                    <option value="{{ $p->kode_mentor_pelajaran }}">{{ $p->mp_ke_mapel->nama_pelajaran }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -207,7 +210,7 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Jumlah soal<span class="text-danger">*</span></label>
                             <span id="pesan_error" class="text-danger"></span>
-                            <input type="number" name="jumlah_soal_update" class="form-control" min="5" max="20" value="5" id="jumlah_soal">
+                            <input type="number" name="jumlah_soal_update" readonly class="form-control" min="5" max="20" value="5" id="jumlah_soal">
                         </div>
 
                         <div class="form-group">
@@ -293,6 +296,15 @@
 <script>
 
     $(document).ready(function() {
+
+        var jumlah_soal = $("[name='jumlah_soal']").val();
+
+        for(var e = 0; e < jumlah_soal; e++){
+            $("#tabel-"+ e).DataTable();
+        }
+
+        $(".nav-tabs .nav-item:first-child").addClass("active");
+        $(".tab-content .tab-pane:first-child").addClass("active show");
 
         $(".btn-update-title").click(function(){
 
@@ -394,11 +406,12 @@
         });
 
         $(".btn-tambah-soal").click(function(){
-            var judul = $("[name='judul']").val();
-            var jam_mulai = $("[name='jam_mulai']").val();
-            var jam_selesai = $("[name='jam_selesai']").val();
-            var tanggal_mulai = $("[name='tanggal_mulai']").val();
-            var tanggal_selesai = $("[name='tanggal_selesai']").val();
+            var kode = $(this).attr("data-id");
+            var judul = $(".judul-" + kode).val();
+            var jam_mulai = $(".jam_mulai-" + kode).val();
+            var jam_selesai = $(".jam_selesai-" + kode).val();
+            var tanggal_mulai = $(".tanggal_mulai-" + kode).val();
+            var tanggal_selesai = $(".tanggal_selesai-" + kode).val();
 
             //cek jika field masih kosong
             if(jam_mulai == ""){
@@ -484,7 +497,7 @@
                 $("[name='judul']").removeClass("is-invalid");
                 $("[name='tanggal_mulai']").removeClass("is-invalid");
                 $("[name='tanggal_selesai']").removeClass("is-invalid");
-                $(".form-tambah-soal").submit();
+                $(".form-tambah-soal-" + kode).submit();
             }
         });
 
@@ -507,13 +520,14 @@
                     $("[name='kode_judul_soal']").val(hasil.kode_judul_soal);
                     $(".judul-edit").text(hasil.judul);
                     $("[name='judul_update']").val(hasil.judul);
-                    $("[value='" + hasil.kode_mapel +"']").attr("selected", "selected");
-                    $("[name='kode_mapel_update']").val(hasil.kode_mapel);
+                    $("[value='" + hasil.kode_mentor_pelajaran +"']").attr("selected", "selected");
+                    $("[name='kode_mapel_update']").val(hasil.kode_mentor_pelajaran);
                     $("[name='jumlah_soal']").val(hasil.jumlah_soal);
                     $("[name='tgl_mulai_update']").val(hasil.tanggal_mulai.substring(0, 10));
                     $("[name='tanggal_selesai_update']").val(hasil.tanggal_selesai.substring( 0, 10));
-                    $("[name='jam_mulai_update']").val(hasil.tanggal_mulai.substring(10, 16));
-                    $("[name='jam_selesai_update']").val(hasil.tanggal_selesai.substring(10, 16));
+                    $("[name='jam_mulai_update']").val(hasil.tanggal_mulai.substring(11, 16));
+                    $("[name='jam_selesai_update']").val(hasil.tanggal_selesai.substring(11, 16));
+                    $(".modal-edit-judul").modal("show");
                 }
             });
         });
@@ -556,11 +570,23 @@
         });
 
         $(".btn-hapus").click(function(){
-            $("#form-hapus").attr("action");
-            var link = $(this).attr("data-link");
-            console.log(link);
-            $(".modal-hapus").modal();
-            $("#form-hapus").attr("action", link)
+            var id = $(this).attr("data-id");
+            // $("[name='kode_js']").val("");
+            // $("[name='kode_js']").val(id);
+            // $(".form-hapus").attr("href", "{{ url('mentor/soal/hapus/') }}" + "/" + id);
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Seluruh data terhadap soal ini akan terhapus!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Hapus!'
+                }).then((result) => {
+                if (result.value) {
+                    $(".form-hapus-" + id).submit();
+                }
+                });
         });
 
     });
@@ -606,7 +632,6 @@
         'Berhasil update soal!',
         'success'
     )
-
 </script>
 @endif
 

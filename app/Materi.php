@@ -8,7 +8,7 @@ class Materi extends Model
 {
     protected $table = "materi";
 
-    protected $fillable = ['kode_materi', 'judul_materi', 'cover', 'materi'];
+    protected $fillable = ['kode_materi', 'kode_mentor_pelajaran', 'judul_materi', 'cover', 'materi'];
 
     protected $keyType = "string";
     protected $primaryKey = "kode_materi";
@@ -23,7 +23,7 @@ class Materi extends Model
         return $this->belongsTo('App\Pelajaran', "kode_mapel", "kode_mapel");
     }
 
-    public function mentor()
+    public function mentor_ke_materi()
     {
         return $this->belongsTo('App\Pelajaran', "id_mentor");
     }
@@ -33,8 +33,13 @@ class Materi extends Model
         return $this->belongsTo('App\Mentor', "id_mentor");
     }
 
-    public function mp_mtri()
+    public function mp_ke_materi()
     {
-        return $this->belongsTo('App\Mentor_student', "kode_mentor_pelajaran");
+        return $this->belongsTo('App\Mentors_student', "kode_mentor_pelajaran");
+    }
+
+    public function mapel_ke_materi()
+    {
+        return $this->belongsTo('App\Pelajaran', "kode_mapel");
     }
 }

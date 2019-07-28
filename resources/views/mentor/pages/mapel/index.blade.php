@@ -9,8 +9,8 @@
     <h1 class="h3 mb-2 text-gray-800"></h1>
     <div class="col text-right mb-3 mt-3">
 
-        <button class="btn btn-dark btn-modal-tambah-pelajaran"> <i class="fab fa-leanpub"></i> Tambah mata pelajaran</button>
-        <button class="btn btn-info btn-edit-kuota" data-toggle="modal" data-target="#modal-edit-kuota"><i class="fas fa-book"></i> Edit Kuota Kelas</button>
+        <button class="btn btn-dark btn-tambah"> <i class="fab fa-leanpub"></i> Tambah mata pelajaran</button>
+        {{-- <button class="btn btn-info btn-edit-kuota" data-toggle="modal" data-target="#modal-edit-kuota"><i class="fas fa-book"></i> Edit Kuota Kelas</button> --}}
 
     </div>
     {{-- data-target="#modal-pelajaran" data-toggle="modal" --}}
@@ -23,21 +23,41 @@
 
             <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        @foreach ($mp as $m)
-                            <a class="nav-item nav-link" id="nav-{{ $m->mentor_ke_mapel->kode_mapel }}-tab" data-toggle="tab" role="tab" > {{ $m->mentor_ke_mapel->nama_pelajaran }}</a>
+                        @foreach ($mentor->m_ke_mp as $m)
+                            <button class="nav-item nav-link" href="#nav-{{ $m->kode_mentor_pelajaran }}" id="nav-{{ $m->kode_mentor_pelajaran }}-tab" data-toggle="tab" role="tab" > {{ $m->mp_ke_mapel->nama_pelajaran }}</button>
                         @endforeach
                     </div>
                   </nav>
                   <div class="tab-content" id="nav-tabContent">
-                        @foreach ($mp as $m)
-                            <div class="tab-pane fade" id="nav-{{ $m->mentor_ke_mapel->kode_mapel }}" role="tabpanel" aria-labelledby="nav-{{ $m->mentor_ke_mapel->kode_mapel }}-tab">
+                        @foreach ($mentor->m_ke_mp as $m)
+                            <div class="tab-pane fade" id="nav-{{ $m->kode_mentor_pelajaran }}" role="tabpanel" aria-labelledby="nav-{{ $m->kode_mentor_pelajaran }}-tab">
 
-
-
+                                <p class="p-2">Jumlah murid saat ini = {{ $m->mp_ke_ms->count() }} / {{ $m->kuota }}</p>
                                 <div class="container p-3 text-center">
-                                    <a href="#" data-id="{{ $m->mentor_ke_mapel->kode_mapel }}" class="btn btn-outline-success btn-excel"><i class="fas fa-file-excel"></i> EXCEL</a>
-                                    <button href="#" data-id="{{ $m->mentor_ke_mapel->kode_mapel }}" data-nama="{{ $m->mentor_ke_mapel->nama_pelajaran }}" class="btn btn-outline-danger btn-hapus-pelajaran animated bounceInUp"><i class="fas fa-trash-alt"></i> Hapus</button>
-                                    <button href="#" data-id="{{ $m->mentor_ke_mapel->kode_mapel }}" data-nama="{{ $m->mentor_ke_mapel->nama_pelajaran }}"  class="btn btn-outline-secondary btn-edit-kuota animated bounceInUp"><i class="fas fa-edit"></i> Edit kuota</button>
+                                    {{-- <a href="#" data-id="{{ $m->mentor_ke_mapel->kode_mapel }}" class="btn btn-outline-success btn-excel"><i class="fas fa-file-excel"></i> EXCEL</a> --}}
+                                    <button data-id="{{ $m->kode_mentor_pelajaran }}" data-nama="{{ $m->mp_ke_mapel->nama_pelajaran }}" class="btn btn-outline-danger btn-hapus-pelajaran animated bounceInUp"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                    <button data-id="{{ $m->kode_mentor_pelajaran }}" class="btn btn-outline-secondary btn-edit animated bounceInUp"><i class="fas fa-edit"></i> Edit kuota</button>
+
+                                    <form class="form-hapus-{{ $m->kode_mentor_pelajaran }}" action="{{ route('mentor.hapus_mapel', $m->kode_mentor_pelajaran) }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="kmp" value="{{ $m->kode_mentor_pelajaran }}">
+                                    </form>
+
+                                    <div class="edit-kuota-{{ $m->kode_mentor_pelajaran }} edit-kuota p-2">
+
+                                            <form class="form-group form-update-kuota-{{ $m->kode_mentor_pelajaran }}" action="{{ route('mentor.edit_kuota') }}" method="POST">
+                                                @csrf
+                                                {{-- <input type="hidden" value="{{  }}" name="js" class="jumlah-kuota-{{ $m->kode_mentor_pelajaran }}" data-kuota="{{ $m->kuota }}"> --}}
+                                                <input type="hidden" value="{{ $m->mp_ke_ms->count() }}" name="jsc" class="jsc-{{ $m->kode_mentor_pelajaran }}" data-jsc="{{ $m->mp_ke_ms->count() }}">
+                                                <div class="form-group justify-content-center">
+                                                    <input type="hidden" name="kode_mp" value="{{ $m->kode_mentor_pelajaran }}">
+                                                    <label for="exampleInputEmail1">Kuota</label><br>
+                                                    <span id="pesan_error-{{ $m->kode_mentor_pelajaran }}" class="text-danger"></span>
+                                                    <input type="number" name="kuota_baru" data-id="{{ $m->kode_mentor_pelajaran }}" min="{{ $m->mp_ke_ms->count() }}" max="150" value="{{ $m->kuota }}" class="form-control text-center w-100 kuota-baru-{{ $m->kode_mentor_pelajaran }}" aria-describedby="emailHelp">
+                                                </div>
+                                                <button type="button" class="btn btn-primary btn-update-kuota" data-id="{{ $m->kode_mentor_pelajaran }}"><i class="fas fa-upload"></i> Update</button>
+                                            </form>
+                                    </div>
                                 </div>
 
                                 <div class="table-responsive w-100 animated bounceInUp">
@@ -51,27 +71,9 @@
                                         </thead>
                                         <tbody>
                                                 <tr class="text-center">
-                                                    <td>
-                                                        @empty($m->mp_ke_ms)
-                                                            0 Murid
-                                                        @else
-                                                            {{ $m->mp_ke_ms->count() }} Murid
-                                                        @endempty
-                                                    </td>
-                                                    <td>
-                                                        @empty($m->mp_mtri)
-                                                            0 Materi
-                                                        @else
-                                                            {{ $m->mp_mtri->count() }} Materi
-                                                        @endempty
-                                                    </td>
-                                                    <td>
-                                                        @empty($m->mp_js)
-                                                            0 Soal
-                                                        @else
-                                                            {{ $m->mp_js->count() }} Soal
-                                                        @endempty
-                                                    </td>
+                                                    <td>{{ $m->mp_ke_ms->count() }} Murid</td>
+                                                    <td>{{ $m->mp_ke_materi->count() }} Materi</td>
+                                                    <td>{{ $m->mp_ke_js->count()}}</td>
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -113,12 +115,45 @@
       </div>
 
 
+      <div class="modal fade modal-tambah" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+                <div class="modal-header text-center">
+                    Tambah Mata Pelajaran (Mapel)
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-group" method="post" action="{{ route('mentor.tambah_mapel') }}">
+                        @csrf
+                        <div class="form-group w-100">
+                            <br>
+                                <select name="mapel" class="form-control">
+                                    @foreach ($mapel as $mp)
+                                        <option value="{{ $mp->kode_mapel }}">{{ $mp->nama_pelajaran }}</option>
+                                    @endforeach
+                                </select>
+                        </div>
+                </div>
+                <div class="modal-footer text-right">
+                        <button type="submit" class="btn btn-dark"><i class="fas fa-plus"></i> Tambah</button>
+                </div>
+            </form>
+              </div>
+            </div>
+          </div>
+
+
 
 @endsection
 
 @section('scriptcss')
 
 <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+<style>
+.edit-kuota{
+    display: none;
+}
+</style>
 
 @endsection
 
@@ -135,8 +170,82 @@
     $(document).ready(function(){
         $("#nav-tab .nav-item:first-child").addClass("active show");
         $(".tab-content .tab-pane:first-child").addClass("active show");
+
+
+        $(".btn-tambah").click(function(){
+            $(".modal-tambah").modal('show');
+        });
+
+        $(".btn-edit").click(function(){
+            var kode = $(this).attr('data-id');
+            // var js = $(this).attr('data-js');
+
+            $(".edit-kuota-" + kode).toggle(1000);
+        });
+
+        $(".btn-update-kuota").click(function(){
+            var kode = $(this).attr("data-id");
+
+            var js = $(".jumlah-kuota-" + kode).val();
+            var jsc = $(".jsc-" + kode).val();
+            var kuota = $(".kuota-baru-" + kode).val();
+            var jsc = $(".jsc-" + kode).val();
+
+            if(kuota < jsc){
+                Swal.fire({
+                    title: "Gagal",
+                    text: "Kuota tidak boleh dibawah jumlah student (murid) saat ini !",
+                    type: "warning",
+                    showCancelButton: false,
+                    showConfirmButton: true,
+                    confirmButtonText: "mengerti",
+                    animation: false,
+                    customClass: {
+                        popup: "animated shake"
+                    }
+                });
+            }else{
+                $(".form-update-kuota-" + kode).submit();
+            }
+        });
+
+        $("[name='kuota_baru']").keypress(function(e) {
+            //if the letter is not digit then display error and don't type anything
+            var kode = $(this).attr("data-id");
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#pesan_error-" + kode).html("Hanya Angka!").show().fadeOut(5000);
+                return false;
+            }
+        });
+
+            $(".btn-hapus-pelajaran").click(function(){
+            var id = $(this).attr("data-id");
+            var nama = $(this).attr("data-nama");
+
+            Swal.fire({
+                title: 'Apakah anda yakin ?',
+                html: "Seluruh data yang terkait dengan pelajaran <span class='text-danger font-weight-bold'>" + nama +  "</span> akan sepenuhnya dihapus!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d11',
+                confirmButtonText: 'Hapus!',
+                cancelButtonText: 'Batal',
+                animation: false,
+                customClass: {
+                    popup: 'animated shake'
+                }
+                }).then((result) => {
+                    if (result.value) {
+
+                        $(".form-hapus-" + id).submit();
+
+                    }
+                })
     });
 
+});
     // $(function(){
 
         // $(".btn-edit-kuota").click(function(){
@@ -265,10 +374,6 @@
     //         }
     //     });
 
-    //     $(".btn-modal-tambah-pelajaran").click(function(){
-    //         $("#modal-pelajaran").modal('show');
-    //     });
-
     //     $("#nav-tab a:first-child").addClass("active");
 
     //     $(".tab-content .tab-pane:first-child").addClass('active show');
@@ -375,18 +480,6 @@
 
 </script>
 @endif
-
-@if(Session::has('kuota_berhasil'))
-<script>
-    Swal.fire(
-        'Berhasil!',
-        "berhasil mengupdate kuota",
-        'success'
-    )
-
-</script>
-@endif
-
 @if(Session::has('pelajaran_kosong'))
 <script>
     Swal.fire({
@@ -403,8 +496,48 @@
     });
 </script>
 {{Session::forget("pelajaran_kosong")}}
+@endif --}}
+
+@if(Session::get('pelajaran_dihapus'))
+<script>
+    Swal.fire(
+        'Berhasil!',
+        "berhasil menghapus mata pelajaran",
+        'success'
+    )
+
+</script>
 @endif
- --}}
+
+@if(Session::has('kuota_berhasil'))
+<script>
+    Swal.fire(
+        'Berhasil!',
+        "berhasil mengupdate kuota",
+        'success'
+    )
+
+</script>
+@endif
+
+
+@if(Session::has('sudah_ada'))
+<script>
+    Swal.fire({
+        title: "Gagal",
+        text: "Pelajaran telah anda ambil!",
+        type: "error",
+        showCancelButton: false,
+        showConfirmButton: true,
+        confirmButtonText: "Mengerti",
+        animation: false,
+        customClass: {
+            popup: "animated shake"
+        }
+    });
+</script>
+@endif
+
 
 
 @endsection

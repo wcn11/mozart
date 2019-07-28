@@ -30,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/mentor/student';
+    protected $redirectTo = '/mentor';
 
     /**
      * Create a new controller instance.
@@ -66,15 +66,14 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $m = Mentor::max("id_mentor");
-        $s = substr($m, 5)+1;
-        $nomor = sprintf( "%04s", $s);
+        $s = substr($m, 5) + 1;
+        $nomor = sprintf("%04s", $s);
         return Mentor::create([
-            'id_mentor' => "MNTR-".$s,
+            'id_mentor' => "MNTR-" . $s,
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
-        
     }
     /**
      * Show the application registration form.
@@ -95,5 +94,4 @@ class RegisterController extends Controller
     {
         return Auth::guard('mentor');
     }
-
 }

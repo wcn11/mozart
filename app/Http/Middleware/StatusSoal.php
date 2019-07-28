@@ -22,40 +22,38 @@ class StatusSoal
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::guard('student')->check()){
+        if (Auth::guard('student')->check()) {
 
             $nilai = Nilai::where("id_student", Auth::guard('student')->user()->id_student)->where('status', "mengerjakan")->get();
-        
-            if(count($nilai) > 0){
+
+            if (count($nilai) > 0) {
 
                 $id = $nilai[0]['kode_judul_soal'];
 
                 $nilai_id = Nilai::where("kode_judul_soal", $id)->get();
-    
+
                 $sji = Soal_judul::find($id);
 
-                if( now() > $sji->tanggal_selesai){
+                if (now() > $sji->tanggal_selesai) {
 
-                    if(count($nilai_id) > 0){
+                    if (count($nilai_id) > 0) {
                         $nilai = Nilai::find($nilai_id[0]['kode_nilai']);
 
                         $nilai->status = "selesai";
-                        
+
                         $nilai->update();
 
-                        return redirect()->route('student.soal_permentor', Crypt::encrypt($sji->id_mentor)); 
-
-                    }else{
-                        return redirect()->route('student.soal_permentor', Crypt::encrypt($sji->id_mentor)); 
+                        return redirect()->route('student.soal_permentor', Crypt::encrypt($sji->id_mentor));
+                    } else {
+                        return redirect()->route('student.soal_permentor', Crypt::encrypt($sji->id_mentor));
                     }
+                } else {
 
-                }else{
-
-                    if(count($nilai) > 0 ){
+                    if (count($nilai) > 0) {
 
                         $hasil = Hasil::where("kode_judul_soal", $nilai[0]['kode_judul_soal'])->get();
 
-                        $id_hasil_terakhir = $hasil[$hasil->count() - 1 ]['kode_soal'];
+                        $id_hasil_terakhir = $hasil[$hasil->count() - 1]['kode_hasil'];
 
                         $jawaban = Hasil::find($id_hasil_terakhir);
 
@@ -65,12 +63,9 @@ class StatusSoal
 
                         $id_param = $id_encrypted;
 
-                        return Redirect::to("student/soal/mengerjakan/".$id_encrypted ."/". $id_param ."?page=".$hasil->count());
-
+                        return Redirect::to("student/soal/mengerjakan/" . $id_encrypted . "/" . $id_param . "?page=" . $hasil->count());
                     }
-
                 }
-            
             }
         }
 

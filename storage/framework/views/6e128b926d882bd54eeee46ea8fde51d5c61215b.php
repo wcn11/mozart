@@ -6,8 +6,8 @@
     <h1 class="h3 mb-2 text-gray-800"></h1>
     <div class="col text-right mb-3 mt-3">
 
-        <button class="btn btn-dark btn-modal-tambah-pelajaran"> <i class="fab fa-leanpub"></i> Tambah mata pelajaran</button>
-        <button class="btn btn-info btn-edit-kuota" data-toggle="modal" data-target="#modal-edit-kuota"><i class="fas fa-book"></i> Edit Kuota Kelas</button>
+        <button class="btn btn-dark btn-tambah"> <i class="fab fa-leanpub"></i> Tambah mata pelajaran</button>
+        
 
     </div>
     
@@ -20,21 +20,40 @@
 
             <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <?php $__currentLoopData = $mp; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <a class="nav-item nav-link" id="nav-<?php echo e($m->mentor_ke_mapel->kode_mapel); ?>-tab" data-toggle="tab" role="tab" > <?php echo e($m->mentor_ke_mapel->nama_pelajaran); ?></a>
+                        <?php $__currentLoopData = $mentor->m_ke_mp; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <button class="nav-item nav-link" href="#nav-<?php echo e($m->kode_mentor_pelajaran); ?>" id="nav-<?php echo e($m->kode_mentor_pelajaran); ?>-tab" data-toggle="tab" role="tab" > <?php echo e($m->mp_ke_mapel->nama_pelajaran); ?></button>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                   </nav>
                   <div class="tab-content" id="nav-tabContent">
-                        <?php $__currentLoopData = $mp; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <div class="tab-pane fade" id="nav-<?php echo e($m->mentor_ke_mapel->kode_mapel); ?>" role="tabpanel" aria-labelledby="nav-<?php echo e($m->mentor_ke_mapel->kode_mapel); ?>-tab">
+                        <?php $__currentLoopData = $mentor->m_ke_mp; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="tab-pane fade" id="nav-<?php echo e($m->kode_mentor_pelajaran); ?>" role="tabpanel" aria-labelledby="nav-<?php echo e($m->kode_mentor_pelajaran); ?>-tab">
 
-
-
+                                <p class="p-2">Jumlah murid saat ini = <?php echo e($m->mp_ke_ms->count()); ?> / <?php echo e($m->kuota); ?></p>
                                 <div class="container p-3 text-center">
-                                    <a href="#" data-id="<?php echo e($m->mentor_ke_mapel->kode_mapel); ?>" class="btn btn-outline-success btn-excel"><i class="fas fa-file-excel"></i> EXCEL</a>
-                                    <button href="#" data-id="<?php echo e($m->mentor_ke_mapel->kode_mapel); ?>" data-nama="<?php echo e($m->mentor_ke_mapel->nama_pelajaran); ?>" class="btn btn-outline-danger btn-hapus-pelajaran animated bounceInUp"><i class="fas fa-trash-alt"></i> Hapus</button>
-                                    <button href="#" data-id="<?php echo e($m->mentor_ke_mapel->kode_mapel); ?>" data-nama="<?php echo e($m->mentor_ke_mapel->nama_pelajaran); ?>"  class="btn btn-outline-secondary btn-edit-kuota animated bounceInUp"><i class="fas fa-edit"></i> Edit kuota</button>
+                                    
+                                    <button data-id="<?php echo e($m->kode_mentor_pelajaran); ?>" data-nama="<?php echo e($m->mp_ke_mapel->nama_pelajaran); ?>" class="btn btn-outline-danger btn-hapus-pelajaran animated bounceInUp"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                    <button data-id="<?php echo e($m->kode_mentor_pelajaran); ?>" class="btn btn-outline-secondary btn-edit animated bounceInUp"><i class="fas fa-edit"></i> Edit kuota</button>
+
+                                    <form class="form-hapus-<?php echo e($m->kode_mentor_pelajaran); ?>" action="<?php echo e(route('mentor.hapus_mapel', $m->kode_mentor_pelajaran)); ?>" method="post">
+                                        <?php echo csrf_field(); ?>
+                                    </form>
+
+                                    <div class="edit-kuota-<?php echo e($m->kode_mentor_pelajaran); ?> edit-kuota p-2">
+
+                                            <form class="form-group form-update-kuota-<?php echo e($m->kode_mentor_pelajaran); ?>" action="<?php echo e(route('mentor.edit_kuota')); ?>" method="POST">
+                                                <?php echo csrf_field(); ?>
+                                                
+                                                <input type="hidden" value="<?php echo e($m->mp_ke_ms->count()); ?>" name="jsc" class="jsc-<?php echo e($m->kode_mentor_pelajaran); ?>" data-jsc="<?php echo e($m->mp_ke_ms->count()); ?>">
+                                                <div class="form-group justify-content-center">
+                                                    <input type="hidden" name="kode_mp" value="<?php echo e($m->kode_mentor_pelajaran); ?>">
+                                                    <label for="exampleInputEmail1">Kuota</label><br>
+                                                    <span id="pesan_error-<?php echo e($m->kode_mentor_pelajaran); ?>" class="text-danger"></span>
+                                                    <input type="number" name="kuota_baru" data-id="<?php echo e($m->kode_mentor_pelajaran); ?>" min="<?php echo e($m->mp_ke_ms->count()); ?>" max="150" value="<?php echo e($m->kuota); ?>" class="form-control text-center w-100 kuota-baru-<?php echo e($m->kode_mentor_pelajaran); ?>" aria-describedby="emailHelp">
+                                                </div>
+                                                <button type="button" class="btn btn-primary btn-update-kuota" data-id="<?php echo e($m->kode_mentor_pelajaran); ?>"><i class="fas fa-upload"></i> Update</button>
+                                            </form>
+                                    </div>
                                 </div>
 
                                 <div class="table-responsive w-100 animated bounceInUp">
@@ -48,27 +67,9 @@
                                         </thead>
                                         <tbody>
                                                 <tr class="text-center">
-                                                    <td>
-                                                        <?php if(empty($m->mp_ke_ms)): ?>
-                                                            0 Murid
-                                                        <?php else: ?>
-                                                            <?php echo e($m->mp_ke_ms->count()); ?> Murid
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php if(empty($m->mp_mtri)): ?>
-                                                            0 Materi
-                                                        <?php else: ?>
-                                                            <?php echo e($m->mp_mtri->count()); ?> Materi
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php if(empty($m->mp_js)): ?>
-                                                            0 Soal
-                                                        <?php else: ?>
-                                                            <?php echo e($m->mp_js->count()); ?> Soal
-                                                        <?php endif; ?>
-                                                    </td>
+                                                    <td><?php echo e($m->mp_ke_ms->count()); ?> Murid</td>
+                                                    <td><?php echo e($m->mp_ke_materi->count()); ?> Materi</td>
+                                                    <td><?php echo e($m->mp_ke_js->count()); ?></td>
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -110,12 +111,45 @@
       </div>
 
 
+      <div class="modal fade modal-tambah" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+                <div class="modal-header text-center">
+                    Tambah Mata Pelajaran (Mapel)
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-group" method="post" action="<?php echo e(route('mentor.tambah_mapel')); ?>">
+                        <?php echo csrf_field(); ?>
+                        <div class="form-group w-100">
+                            <br>
+                                <select name="mapel" class="form-control">
+                                    <?php $__currentLoopData = $mapel; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $mp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($mp->kode_mapel); ?>"><?php echo e($mp->nama_pelajaran); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                        </div>
+                </div>
+                <div class="modal-footer text-right">
+                        <button type="submit" class="btn btn-dark"><i class="fas fa-plus"></i> Tambah</button>
+                </div>
+            </form>
+              </div>
+            </div>
+          </div>
+
+
 
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('scriptcss'); ?>
 
 <link href="<?php echo e(asset('vendor/datatables/dataTables.bootstrap4.min.css')); ?>" rel="stylesheet">
+<style>
+.edit-kuota{
+    display: none;
+}
+</style>
 
 <?php $__env->stopSection(); ?>
 
@@ -132,8 +166,82 @@
     $(document).ready(function(){
         $("#nav-tab .nav-item:first-child").addClass("active show");
         $(".tab-content .tab-pane:first-child").addClass("active show");
+
+
+        $(".btn-tambah").click(function(){
+            $(".modal-tambah").modal('show');
+        });
+
+        $(".btn-edit").click(function(){
+            var kode = $(this).attr('data-id');
+            // var js = $(this).attr('data-js');
+
+            $(".edit-kuota-" + kode).toggle(1000);
+        });
+
+        $(".btn-update-kuota").click(function(){
+            var kode = $(this).attr("data-id");
+
+            var js = $(".jumlah-kuota-" + kode).val();
+            var jsc = $(".jsc-" + kode).val();
+            var kuota = $(".kuota-baru-" + kode).val();
+            var jsc = $(".jsc-" + kode).val();
+
+            if(kuota < jsc){
+                Swal.fire({
+                    title: "Gagal",
+                    text: "Kuota tidak boleh dibawah jumlah student (murid) saat ini !",
+                    type: "warning",
+                    showCancelButton: false,
+                    showConfirmButton: true,
+                    confirmButtonText: "mengerti",
+                    animation: false,
+                    customClass: {
+                        popup: "animated shake"
+                    }
+                });
+            }else{
+                $(".form-update-kuota-" + kode).submit();
+            }
+        });
+
+        $("[name='kuota_baru']").keypress(function(e) {
+            //if the letter is not digit then display error and don't type anything
+            var kode = $(this).attr("data-id");
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#pesan_error-" + kode).html("Hanya Angka!").show().fadeOut(5000);
+                return false;
+            }
+        });
+
+            $(".btn-hapus-pelajaran").click(function(){
+            var id = $(this).attr("data-id");
+            var nama = $(this).attr("data-nama");
+
+            Swal.fire({
+                title: 'Apakah anda yakin ?',
+                html: "Seluruh data yang terkait dengan pelajaran <span class='text-danger font-weight-bold'>" + nama +  "</span> akan sepenuhnya dihapus!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d11',
+                confirmButtonText: 'Hapus!',
+                cancelButtonText: 'Batal',
+                animation: false,
+                customClass: {
+                    popup: 'animated shake'
+                }
+                }).then((result) => {
+                    if (result.value) {
+
+                        $(".form-hapus-" + id).submit();
+
+                    }
+                })
     });
 
+});
     // $(function(){
 
         // $(".btn-edit-kuota").click(function(){
@@ -262,10 +370,6 @@
     //         }
     //     });
 
-    //     $(".btn-modal-tambah-pelajaran").click(function(){
-    //         $("#modal-pelajaran").modal('show');
-    //     });
-
     //     $("#nav-tab a:first-child").addClass("active");
 
     //     $(".tab-content .tab-pane:first-child").addClass('active show');
@@ -339,6 +443,47 @@
     // });
 
 </script>
+
+
+<?php if(Session::get('pelajaran_dihapus')): ?>
+<script>
+    Swal.fire(
+        'Berhasil!',
+        "berhasil menghapus mata pelajaran",
+        'success'
+    )
+
+</script>
+<?php endif; ?>
+
+<?php if(Session::has('kuota_berhasil')): ?>
+<script>
+    Swal.fire(
+        'Berhasil!',
+        "berhasil mengupdate kuota",
+        'success'
+    )
+
+</script>
+<?php endif; ?>
+
+
+<?php if(Session::has('sudah_ada')): ?>
+<script>
+    Swal.fire({
+        title: "Gagal",
+        text: "Pelajaran telah anda ambil!",
+        type: "error",
+        showCancelButton: false,
+        showConfirmButton: true,
+        confirmButtonText: "Mengerti",
+        animation: false,
+        customClass: {
+            popup: "animated shake"
+        }
+    });
+</script>
+<?php endif; ?>
 
 
 

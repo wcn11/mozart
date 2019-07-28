@@ -30,7 +30,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/mentor/student';
+    protected $redirectTo = '/mentor';
 
     /**
      * Create a new controller instance.
@@ -86,13 +86,13 @@ class LoginController extends Controller
     //         'client_secret' => 'y5Eov7XU4GK8ua3I93i8CQwD',
     //         'redirect'     => 'http://localhost:8000/mentor/google/callback'
     //     ];
-        
+
     //     Socialite::buildProvider(\Laravel\Socialite\Two\GoogleProvider::class, $config);
     //     return Socialite::driver($driver)->redirect();
     // }
 
     // public function handleProviderCallback($driver){
- 
+
     //         // echo $driver;
 
     //         try {
@@ -102,7 +102,7 @@ class LoginController extends Controller
     //             //     'client_secret' => 'y5Eov7XU4GK8ua3I93i8CQwD',
     //             //     'redirect'     => 'http://localhost:8000/mentor/google/callback'
     //             // ];
-                
+
     //             // Socialite::buildProvider(\Laravel\Socialite\Two\GoogleProvider::class, $config);
 
     //             date_default_timezone_set('Asia/Jakarta');
@@ -127,7 +127,7 @@ class LoginController extends Controller
     //         Auth::guard('mentor')->login($create, true);
 
     //         return redirect()->route("mentor.dashboard");
-            
+
     //         } catch (\Exception $e) {
     //             return $e;
     //         }

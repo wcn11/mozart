@@ -10,23 +10,40 @@ use App\Pelajaran;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Crypt;
 use DOMPDF;
+use App\Mentor;
 
 class MateriController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('mentor.cek_mapel');
+    }
+
     public function index()
     {
         $id_mentor = Auth::guard('mentor')->user()->id_mentor;
 
-        $materi = Materi::where('id_mentor', $id_mentor)->get();
+        $mentor = Mentor::find($id_mentor);
 
-        return view('mentor.pages.materi.daftar_materi', ['materi' => $materi]);
-
+        return view('mentor.pages.materi.daftar_materi', ['mentor' => $mentor]);
     }
-    public function materi_upload()
-    {
-        $mapel = Pelajaran::all();
 
-        return view('mentor.pages.materi.materi_upload', ['mapel' => $mapel]);
+    public function tambah_materi(Request $request)
+    {
+        $kode_mapel = $request->kode_mapel;
+
+        $mapel = Pelajaran::find($kode_mapel);
+
+        $kmp = $request->kmp;
+
+        return view("mentor.pages.materi.materi_upload", compact("kode_mapel", "mapel", "kmp"));
+    }
+
+    public function ambil_data($kode_materi)
+    {
+        $materi = Materi::find($kode_materi);
+
+        return response()->json($materi);
     }
 
 
@@ -43,7 +60,7 @@ class MateriController extends Controller
 
         $this->validate($r, [
             'cover' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ],$pesan);
+        ], $pesan);
 
         $id_mentor = Auth::guard('mentor')->user()->id_mentor;
 
@@ -62,17 +79,19 @@ class MateriController extends Controller
 
         $materi = new Materi;
 
-        $materi->kode_materi = "MTRI-".$mentor_substr."-".$mapel_substr.'-'.$s;
+        $materi->kode_materi = "MTRI-" . $mentor_substr . "-" . $mapel_substr . '-' . $s;
 
         $materi->judul_materi = $r->judul;
 
         $materi->id_mentor = $id_mentor;
 
+        $materi->kode_mentor_pelajaran = $r->kmp;
+
         $materi->kode_mapel = $r->kode_mapel;
 
-        if ($r->has('file')) {
+        if ($r->has('cover')) {
 
-            $file = $r->file('file');
+            $file = $r->file('cover');
 
             $nama_file = time() . "_" . $file->getClientOriginalName();
 
@@ -94,15 +113,14 @@ class MateriController extends Controller
 
     public function materi_edit($kode_materi)
     {
-        $id = Crypt::decrypt($kode_materi);
-        
+
         $id_mentor = Auth::guard('mentor')->user()->id_mentor;
 
-        $pelajaran = Pelajaran::where("id_mentor", $id_mentor)->get();
+        // $pelajaran = Pelajaran::where("id_mentor", $id_mentor)->get();
 
-        $materi = Materi::find($id);
+        $materi = Materi::find($kode_materi);
 
-        return view('mentor.pages.materi.materi_edit', ['pelajaran' => $pelajaran, "m" => $materi]);
+        return view('mentor.pages.materi.materi_edit', ["m" => $materi]);
     }
 
     public function materi_update(Request $r)
@@ -115,6 +133,19 @@ class MateriController extends Controller
 
         $materi->kode_mapel = $r->kode_mapel;
 
+        if ($r->has('cover')) {
+
+            $file = $r->file('cover');
+
+            $nama_file = time() . "_" . $file->getClientOriginalName();
+
+            // isi dengan nama folder tempat kemana file diupload
+            $tujuan_upload = 'images/cover_materi/';
+            $file->move($tujuan_upload, $nama_file);
+
+            $materi->cover = $nama_file;
+        }
+
         $materi->materi = $r->materi;
 
         $materi->save();
@@ -124,9 +155,9 @@ class MateriController extends Controller
         return redirect()->route("mentor.materi");
     }
 
-    public function materi_destroy($id)
+    public function hapus_materi(Request $request)
     {
-        $materi_id = Crypt::decrypt($id);
+        $materi_id = $request->kode_materi;
 
         $materi = Materi::find($materi_id);
 
@@ -139,8 +170,8 @@ class MateriController extends Controller
 
     public function downloadPDF($id)
     {
-        $materi_id = Crypt::decrypt($id);
-        $materi = Materi::find($materi_id);
+        // $materi_id = Crypt::decrypt($id);
+        $materi = Materi::find($id);
 
         $pdf = DOMPDF::loadView('mentor.pages.materi.pdf', compact('materi'));
 

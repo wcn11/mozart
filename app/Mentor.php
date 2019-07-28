@@ -21,7 +21,7 @@ class Mentor extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'id_mentor','name', 'email', "kuota", 'password', 'foto',
+        'id_mentor', 'name', 'email', "kuota", 'password', 'foto',
     ];
 
 
@@ -74,7 +74,7 @@ class Mentor extends Authenticatable implements MustVerifyEmail
         return $this->hasMany('App\Pelajaran', "id_mentor");
     }
 
-    public function materi()
+    public function mentor_ke_materi()
     {
         return $this->hasMany('App\Materi', "id_mentor");
     }
@@ -83,17 +83,24 @@ class Mentor extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany('App\Soal_judul', "id_mentor");
     }
-    
-    public function kjs_ke_mentor(){
-        return $this->belongsTo("App\Soal_judul","id_mentor");
-    }
-    
-    public function materi_ke_mentor(){
-        return $this->belongsTo("App\Materi","id_mentor");
+
+    public function kjs_ke_mentor()
+    {
+        return $this->belongsTo("App\Soal_judul", "id_mentor");
     }
 
-    // public function jumlah_student()
-    // {
-    //     return $this->belongsToMany('App\Student', "Mentor_student", "id_student", "id_student");
-    // }
+    public function materi_ke_mentor()
+    {
+        return $this->belongsTo("App\Materi", "id_mentor");
+    }
+
+    public function m_ke_mp()
+    {
+        return $this->hasMany('App\Mentor_pelajaran', "id_mentor");
+    }
+
+    public function m_ke_ms()
+    {
+        return $this->hasMany('App\Mentors_student', "id_mentor");
+    }
 }

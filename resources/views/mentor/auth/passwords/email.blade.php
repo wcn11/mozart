@@ -21,10 +21,10 @@
 </style>
 	<body>
 
-		<div class="wrapper">
-			<div class="inner">
+		<div class="wrapper bg-mentor">
+			<div class="inner" style="position:relative; left:20%;">
 				<div class="image-holder" style="padding: 50px;">
-                    <img src="{{ url('logreg/images/admin.jpg') }}">
+                        <img src="{{ url('logreg/images/icon-mentor.jpg') }}" style="width: 700px; height: 300px;">
         </div>
         <form method="POST" action="{{ route('mentor.password.email') }}" aria-label="{{ __('Reset Password') }}">
             @csrf
@@ -67,7 +67,7 @@
   'error'
 )
         }else{
-          
+
     Swal.fire(
   'Terkirim!',
   'Email reset password telah dikirim!',

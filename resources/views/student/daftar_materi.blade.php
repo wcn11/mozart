@@ -7,27 +7,71 @@
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800"><img src="https://img.icons8.com/color/48/000000/todo-list.png" style="width:30px;"> Daftar Materi</h1>
-     <p class="mb-4">Murid yang ada pada daftar dibawah adalah murid yang mengikuti anda dan anda dapat <span
-            class="badge badge-danger">mengeluarkan</span> murid anda.</p>  
+     <p class="mb-4">Anda dapat membaca dan print materi.<br><small class="text-danger">Video tidak akan tampil jika dicetak</small></p>
+
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary"><img src="https://img.icons8.com/color/48/000000/student-male.png" width="30px"/>Murid</h6>
+        <div class="card-header py-3 text-center">
+            <h6 class="m-0 font-weight-bold text-dark"><i class="fas fa-book-reader"></i> Materi</h6>
         </div>
         <div class="card-body container-utama text-left">
 
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            @empty($mentor->m_ke_mp->count())
+                                Belum membuat mata pelajaran
+                            @else
+                                @foreach($mentor->m_ke_mp as $m)
+                                    <a class="nav-item nav-link" id="nav-{{ $m->kode_mentor_pelajaran }}-tab" data-toggle="tab" href="#nav-{{ $m->kode_mentor_pelajaran }}" role="tab" aria-controls="nav-{{ $m->kode_mentor_pelajaran }}" aria-selected="true">{{ $m->mp_ke_mapel->nama_pelajaran }}</a>
+                                @endforeach
+                            @endempty
+                        </div>
+                    </nav>
+
+                    <div class="tab-content" id="nav-tabContent">
+
+                        @foreach ($mentor->m_ke_mp as $m_key => $m_value)
+                            <div class="tab-pane fade p-2" id="nav-{{ $m_value->kode_mentor_pelajaran }}" role="tabpanel" aria-labelledby="nav-{{ $m_value->kode_mentor_pelajaran }}-tab">
+
+                                    <div class="row">
+
+                                            @foreach ($m_value->mp_ke_materi as $m)
+
+                                            {{--  {{ $m }}  --}}
+
+                                                <div class="col-md-3">
+                                                    <div class="card materi rounded">
+                                                        <a href="{{ route('student.materi_read', $m->kode_materi) }} ">
+                                                            <img src="{{ url('/images/cover_materi/'.$m->cover) }}" alt="John" style="width:100%"  data-toggle="tooltip" data-placement="top" title="{{ $m->judul_materi }}">
+                                                            <p class="title p-2" data-toggle="tooltip" data-placement="top" title="{{ $m->judul_materi }}">{{ $m->judul_materi }}</p>
+                                                        </a>
+
+                                                        <p>
+                                                            <p class="badge badge-info">{{ $m->dibuat }}</p>
+                                                            <a href="{{ route('student.materi_read', $m->kode_materi) }}"><button class="baca rounded"><img src="https://img.icons8.com/color/48/000000/reading-ebook.png" style="width:30px;"> Baca</button></a>
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                            @endforeach
+                                        </div>
+
+                                </div>
+                            @endforeach
+                    </div>
+{{--
             <div class="row">
-                
+
                 @foreach ($materi as $m)
-                    
+
                     <div class="col-md-3">
                         <div class="card materi rounded">
                             <a href="{{ route('student.materi_read', $m->kode_materi) }} ">
-                                <img src="{{ url('/images/'.$m->cover) }}" alt="John" style="width:100%"  data-toggle="tooltip" data-placement="top" title="{{ $m->judul_materi }}">
+                                <img src="{{ url('/images/cover_materi/'.$m->cover) }}" alt="John" style="width:100%"  data-toggle="tooltip" data-placement="top" title="{{ $m->judul_materi }}">
                                 <p class="title p-2" data-toggle="tooltip" data-placement="top" title="{{ $m->judul_materi }}">{{ $m->judul_materi }}</p>
                             </a>
-                            <p><img src="https://img.icons8.com/color/48/000000/math.png" class="icon-colored"> {{ $m->pelajaran->nama_pelajaran }}</p>
+
                             <p>
                                 <p class="badge badge-info">{{ $m->dibuat }}</p>
                                 <a href="{{ route('student.materi_read', $m->kode_materi) }}"><button class="baca rounded"><img src="https://img.icons8.com/color/48/000000/reading-ebook.png" style="width:30px;"> Baca</button></a>
@@ -36,10 +80,10 @@
                     </div>
 
                 @endforeach
-            </div>
-            
+            </div>  --}}
+
         </div>
-    </div> 
+    </div>
 
 </div>
 
@@ -73,10 +117,10 @@
   font-size: 14px;
 }
 .title{
-    white-space: nowrap; 
-  width: 100%; 
+    white-space: nowrap;
+  width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
 }
 
 .baca {
@@ -110,7 +154,10 @@
 <script> --}}
 
     <script>
-	
+        $("document").ready(function(){
+            $(".nav-tabs .nav-item:first-child").addClass("active");
+            $(".tab-content .tab-pane:first-child").addClass("active show");
+        });
 
     </script>
 @endsection

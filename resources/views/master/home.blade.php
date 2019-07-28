@@ -26,7 +26,7 @@
                 </div>
               </div>
 
-              
+
 
                   <!-- Pending Requests Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
@@ -44,7 +44,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
 
 
                   <!-- Earnings (Monthly) Card Example -->
@@ -82,17 +82,17 @@
                             </div>
 
                     <div class="col-md-12 m-2">
-                        
+
                             <div class="card w-100 text-white border-0" style="">
-                                    <div class="card-body"  style="background-color:#53d3e8;border-radius:10px;">
+                                    <div class="card-body"  style="border-radius:10px; border: 1px solid green;">
 
                                             <div class="input-group-prepend w-100 mb-2">
                                                     <span class="input-group-text bg-dark text-white label-card">
                                                             <img src="https://img.icons8.com/color/48/000000/school-director.png" class="icon-colored"> Mentor</span>
                                                 </div><br>
-                                        <table id="tabel" class="table table-striped table-bordered table-hover table-borderless" style="width:100%">
-                                                <thead class="text-white">
-                                                    <tr style="background-color:#0a336b;" class="text-center">
+                                        <table id="tabel" class="table table-striped table-bordered table-hover table-border" style="width:100%">
+                                                <thead class="text-dark">
+                                                    <tr class="text-center">
                                                         <th>Profil</th>
                                                         <th>Judul soal</th>
                                                         <th>Pelajaran</th>
@@ -102,7 +102,7 @@
                                                         <th>Hasil</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="text-white">
+                                                <tbody class="text-dark">
                                                     @foreach($mentor as $m)
                                                     <tr>
                                                         <td class="w-25"><img src="{{ url("images/".$m->foto) }}" class="profil rounded"></td>
@@ -121,15 +121,15 @@
 
 
                     </div>
-                
-                    <div class="col-md-12 m-2">
-                        
+
+                    {{--  <div class="col-md-12 m-2">
+
                             <div class="card w-100 text-white border-0" style="">
                                     <div class="card-body" style="background-color:#53d3e8;border-radius:10px;">
-                                        
+
                                             <div class="input-group-prepend w-100 mb-2">
                                                     <span class="input-group-text bg-dark text-white label-card">
-                                                            
+
                                 <img src="https://img.icons8.com/color/48/000000/student-male.png" class="icon-colored"> Student</span>
                                                 </div><br>
                                         <table id="tabel_std" class="table table-striped table-bordered table-hover table-borderless" style="width:100%">
@@ -158,7 +158,7 @@
                                     </div>
 
 
-                    </div>
+                    </div>  --}}
 
 
         </div>

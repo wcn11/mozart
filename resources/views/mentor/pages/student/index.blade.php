@@ -9,64 +9,87 @@
     <h1 class="h3 mb-2 text-gray-800">Daftar Murid</h1>
     <p class="mb-4">Murid yang ada pada daftar dibawah adalah murid yang mengikuti anda dan anda dapat <span
             class="badge badge-danger">mengeluarkan</span> murid anda.</p>
-            Kuota kelas anda : {{ $js }} / {{ Auth::guard("mentor")->user()->kuota }}
-    <div class="text-right p-2">
-        <button class="btn btn-outline-dark btn-kuota" data-id="{{ Auth::guard('mentor')->user()->kuota }}"><i class="fas fa-user-edit"></i> Edit Kuota Kelas</button>
-    </div>
+            <div class="text-right">
+
+                {{--  <button class="btn btn-info text-right btn-tambah"><i class="fas fa-plus"></i> Tambah Kelas</button>  --}}
+            </div>
+    <div class="p-2"></div>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
+        {{-- <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Murid</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="tabel" width="100%" cellspacing="0">
-                    <thead>
-                        <tr style="text-align:center; text-transform:uppercase;">
-                            <th>Foto</th>
-                            <th>ID</th>
-                            <th>Nama</th>
-                            <th>Email</th>
-                            <th>Telepon</th>
-                            <th>Tanggal Mengkuti</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for ($i = 0; $i < count($student); $i++)
-                                
-                                <tr class="text-center">
-                                    <td>
-                                        <div class="profil p-2">
-                                            <img src="{{ url('images/'.$student[$i]['foto']) }}" class="rounded text-center gambar border-success border border-20" alt="your image">
-                                        </div>
-                                    </td>
-                                    <td>{{ $student[$i]['id_student'] }}</td>
-                                    <td>{{ $student[$i]['name'] }}</td>
-                                    <td>{{ $student[$i]['email'] }}</td>
-                                    <td>
-                                        @if ( $student[$i]['no_telepon'] == null)
-                                            belum diisi
-                                        @else
-                                        {{ $student[$i]['no_telepon'] }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ $tanggal_follow[$i]['tanggal_mengikuti'] }}
-                                    </td>
-                                    <td>
+        </div> --}}
 
-                                        <button class=" btn btn-danger btn-delete" data-id="{{ $student[$i]['id_student'] }}">keluarkan</button>
-                                        <form class="form-keluar-{{ $student[$i]['id_student'] }}" action="{{ route('mentor.unfollow', $student[$i]['id_student']) }}" method="post">
-                                            @csrf
-                                        </form>
-                                    </td>
-                                </tr>
-                        @endfor
-                    </tbody>
-                </table>
+        <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    @foreach($mentor->m_ke_mp as $m)
+                        <a class="nav-item nav-link" id="nav-{{ $m->kode_mentor_pelajaran }}-tab" data-toggle="tab" href="#nav-{{ $m->kode_mentor_pelajaran }}" >{{ $m->mp_ke_mapel->nama_pelajaran }}</a>
+                    @endforeach
+                  {{-- <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</a>
+                  <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a> --}}
+                </div>
+              </nav>
+
+              <div class="card-body">
+
+
+              <div class="tab-content" id="nav-tabContent">
+                  @foreach($mentor->m_ke_mp as $m)
+                    <div class="tab-pane fade" id="nav-{{ $m->kode_mentor_pelajaran }}" data-id="{{ $m->kode_mentor_pelajaran }}">
+                        <div class="table-responsive">
+                            <p>Kuota kelas : {{ $m->mp_ke_ms->count() }} / {{ $m->kuota }}</p>
+                            <button class="btn btn-info text-right btn-edit" data-id="{{ $m->kode_mentor_pelajaran }}" data-kuota-sekarang="{{ $m->kuota }}" data-jumlah-student="{{ $m->mp_ke_ms->count() }}"><i class="fas fa-restroom"></i> Edit Kuota Kelas</button>
+
+                            <button class="btn btn-danger text-right btn-hapus" data-id="{{ $m->kode_mentor_pelajaran }}"><i class="fas fa-restroom"></i> Hapus Kelas</button></<button>
+
+                            <form action="{{ route('mentor.hapus_mapel') }}" class="form-hapus" method="post">
+                                @csrf
+                                <input type="hidden" name="kmp">
+                            </form>
+
+                            <div class="p-2"></div>
+                            <table class="table table-table-hover table-bordered" id="tabel-{{ $m->kode_mentor_pelajaran }}">
+                                <thead>
+                                    <tr>
+                                        <th>Profil</th>
+                                        <th>ID Student</th>
+                                        <th>Nama</th>
+                                        <th>Email</th>
+                                        <th>Tanggal Mengikuti</th>
+                                        <th>Pilihan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($m->mp_ke_ms as $ms)
+                                        <tr class="text-center">
+                                            {{-- {{ $ms->s_ke_ms }} --}}
+                                            <td class="w-25">
+                                                <div class="profil justify-content-center">
+                                                    <img src="{{ url($ms->s_ke_ms->foto) }}" class="rounded text-center gambar border-success border w-100 border-20">
+                                                </div>
+                                            </td>
+                                            <td>{{ $ms->s_ke_ms->id_student }}</td>
+                                            <td>{{ $ms->s_ke_ms->name }}</td>
+                                            <td>{{ $ms->s_ke_ms->email }}</td>
+                                            <td>{{ $ms->tanggal_mengikuti }}</td>
+                                            <td>
+                                                <button class="btn btn-info btn-keluarkan" data-id="{{ $ms->kode_mentor_pelajaran }}"><i class="fas fa-outdent"></i> Keluarkan</button>
+                                            </td>
+                                            <form action="{{ route('mentor.student_destroy') }}" class="form-keluarkan-{{ $ms->kode_mentor_pelajaran }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="kode_mengikuti" value="{{ $ms->kode_mengikuti }}">
+                                            </form>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                @endforeach
+              </div>
             </div>
-        </div>
     </div>
 </div>
 
@@ -76,27 +99,56 @@
       <div class="modal-content">
         <div class="modal-body">
             <div class="w-100 p-2 mb-3">
-                
+
                 <form class="form-kuota" action="{{ route('mentor.update_kuota') }}" method="post">
 
                     @csrf
-                    <label for="validationServer05 font-weight-bold">Kuota kelas anda : {{ $js }} / {{ Auth::guard("mentor")->user()->kuota }}</label>
-                    <input type="number" min="1" name="kuota" class="form-control input-kuota" value="{{ Auth::guard("mentor")->user()->kuota }}" id="input-kuota" placeholder="Kuota Kelas" required>
+                    <input name="kmp" type="hidden">
+                    <input type="hidden" name="jumlah_student"> <span id="pesan_error" class="text-danger"></span>
+                    <input type="number" min="1" name="kuota" class="form-control kuota" value="0" id="input-kuota" placeholder="Kuota Kelas" required>
                     <div class="text-kuota d-none">
                         Harap isi kuota kelas
                     </div>
-                    
+
                 </form>
             </div>
         </div>
         <div class="modal-footer">
-                <button class="btn btn-info btn-update">Update</button>
+                <button class="btn btn-info btn-update-kuota">Update</button>
                 <button class="btn btn-dark" data-dismiss="modal">Batal</button>
         </div>
       </div>
     </div>
   </div>
 
+
+<div class="modal fade modal-tambah" tabindex="-1" role="dialog" aria-labelledby="modal-kuota" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="w-100 p-2 mb-3">
+
+                <form class="form-tambah" action="{{ route('mentor.tambah_mapel') }}" method="post">
+
+                    @csrf
+                    <select class="form-control" name="mapel">
+                        @foreach($mapel as $m)
+                            <option value="{{ $m->kode_mapel }}"> {{ $m->nama_pelajaran }}</option>
+                        @endforeach
+                    </select>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+                <button class="btn btn-info btn-update"><i class="fas fa-plus"></i> Tambah</button>
+                <button class="btn btn-dark" data-dismiss="modal">Batal</button>
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+<input type="hidden" value="{{ $mentor->m_ke_mp->count() }}" class="jumlah_mapel">
 @endsection
 
 @section('scriptcss')
@@ -110,7 +162,7 @@
         text-align: center;
     }
     .profil{
-        width: 100%;
+        width: 60%;
         text-align: center !important;
     }
     .sorting_1{
@@ -130,6 +182,98 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 <script>
     $(document).ready(function () {
+
+        $(".btn-hapus").click(function(){
+            var id = $(this).attr("data-id");
+            $("[name='kmp']").val(id);
+
+            Swal.fire({
+                title: 'Peringatan!',
+                text: 'Seluruh data berdasarkan pelajaran ini akan dihapus keseluruhan dan tidak dapat dikembalikan!',
+                type:'warning',
+                confirmButtonText: "Hapus",
+                confirmButtonColor: "red",
+                cancelButtonColor: "#343a40",
+                showCancelButton: true,
+                cancelButtonText: "Batal",
+                animation: false,
+                customClass: {
+                    popup: "animated shake"
+                }
+            }).then((result) => {
+                if(result.value){
+                    $(".form-hapus").submit();
+                }
+            });
+        });
+
+        $(".btn-edit").click(function(){
+            var id = $(this).attr("data-id");
+            var kuota = $(this).attr("data-kuota-sekarang");
+            var jumlah_student = $(this).attr("data-jumah-student");
+
+            $("[name='kmp']").val(id);
+            $("[name='jumlah_student']").val(jumlah_student);
+            $(".kuota").val(kuota);
+            $(".modal-kuota").modal("show");
+        });
+
+        $(".btn-update-kuota").click(function(){
+            var js = $("[name='jumlah_student']").val();
+            var kuota = $(".kuota").val();
+            if(kuota < js){
+                $("#pesan_error").html("Kuota tidak boleh dibawah jumlah student saat ini!").show().fadeOut("slow");
+                return false;
+            }else{
+                $(".form-kuota").submit();
+            }
+        });
+
+        $(".kuota").keypress(function(e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#pesan_error").html("Hanya Angka!").show().fadeOut("slow");
+                return false;
+            }
+        });
+
+        $(".btn-tambah").click(function(){
+            $(".modal-tambah").modal("show");
+        });
+
+        // var kode = $(".tab-content .tab-pane:first-child").attr("data-id");
+        // var jumlah_mapel = $(".jumlah_mapel").val();
+
+        // for(var a = 0; a < jumlah_mapel; a++){
+        //     $("#tabel-" + kode).DataTable();
+        // }
+
+        $(".btn-keluarkan").click(function(){
+            var kode = $(this).attr("data-id");
+
+            Swal.fire({
+                title: 'Peringatan!',
+                text: 'Seluruh data berdasarkan student ini akan dihapus keseluruhan dan tidak dapat dikembalikan!',
+                type:'warning',
+                confirmButtonText: "Keluarkan",
+                confirmButtonColor: "red",
+                cancelButtonColor: "#343a40",
+                showCancelButton: true,
+                cancelButtonText: "Batal",
+                animation: false,
+                customClass: {
+                    popup: "animated shake"
+                }
+            }).then((result) => {
+                if(result.value){
+                    $(".form-keluarkan-" + kode).submit();
+                }
+            });
+        });
+
+        $("#nav-tab .nav-item:first-child").addClass("active");
+        $(".tab-content .tab-pane:first-child").addClass("active show");
 
         $(".btn-kuota").click(function(){
             var kuota = $(this).attr("data-id");
@@ -165,120 +309,8 @@
                 }
             });
 
-        });
-        // $(".btn-delete").click(function(){
-        //     $.ajax({
-        //             type: 'post',
-        //             url:  "http://127.0.0.1:8000/mentor/student/destroy",
-        //             data: {
-        //                 // '_token': $('input[name=_token]').val(),
-        //                 'id': $("#id").val()
-        //             },
-        //             success: function(data) {
-        //                 $('.item' + $('.did').text()).remove();
-        //                 console.log(data);
-        //             },
-        //             error: function(er){
-        //                 console.log(er.errors);
-        //             }
-        //         });
-        // });
-
-
-        $(document).on('click', '.edit-modal', function () {
-            $('#footer_action_button').text("Update");
-            $('#footer_action_button').addClass('glyphicon-check');
-            $('#footer_action_button').removeClass('glyphicon-trash');
-            $('.actionBtn').addClass('btn-success');
-            $('.actionBtn').removeClass('btn-danger');
-            $('.actionBtn').addClass('edit');
-            $('.modal-title').text('Edit');
-            $('.deleteContent').hide();
-            $('.form-horizontal').show();
-            $('#fid').val($(this).data('id'));
-            $('#n').val($(this).data('name'));
-            $('#myModal').modal('show');
-        });
-        $(document).on('click', '.delete-modal', function () {
-            $('#footer_action_button').text(" Delete");
-            $('#footer_action_button').removeClass('glyphicon-check');
-            $('#footer_action_button').addClass('glyphicon-trash');
-            $('.actionBtn').removeClass('btn-success');
-            $('.actionBtn').addClass('btn-danger');
-            $('.actionBtn').addClass('delete');
-            $('.modal-title').text('Delete');
-            $('.did').text($(this).data('id'));
-            $('.deleteContent').show();
-            $('.form-horizontal').hide();
-            $('.dname').html($(this).data('name'));
-            $('#myModal').modal('show');
-        });
-
-        $('.modal-footer').on('click', '.edit', function () {
-
-            $.ajax({
-                type: 'post',
-                url: '/editItem',
-                data: {
-                    '_token': $('input[name=_token]').val(),
-                    'id': $("#fid").val(),
-                    'name': $('#n').val()
-                },
-                success: function (data) {
-                    $('.item' + data.id).replaceWith("<tr class='item" + data.id +
-                        "'><td>" + data.id + "</td><td>" + data.name +
-                        "</td><td><button class='edit-modal btn btn-info' data-id='" +
-                        data.id + "' data-name='" + data.name +
-                        "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" +
-                        data.id + "' data-name='" + data.name +
-                        "' ><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>"
-                    );
-                }
-            });
-        });
-        $("#add").click(function () {
-
-            $.ajax({
-                type: 'post',
-                url: '/addItem',
-                data: {
-                    '_token': $('input[name=_token]').val(),
-                    'name': $('input[name=name]').val()
-                },
-                success: function (data) {
-                    if ((data.errors)) {
-                        $('.error').removeClass('hidden');
-                        $('.error').text(data.errors.name);
-                    } else {
-                        $('.error').addClass('hidden');
-                        $('#table').append("<tr class='item" + data.id + "'><td>" + data
-                            .id + "</td><td>" + data.name +
-                            "</td><td><button class='edit-modal btn btn-info' data-id='" +
-                            data.id + "' data-name='" + data.name +
-                            "'><span class='glyphicon glyphicon-edit'></span> Edit</button> <button class='delete-modal btn btn-danger' data-id='" +
-                            data.id + "' data-name='" + data.name +
-                            "'><span class='glyphicon glyphicon-trash'></span> Delete</button></td></tr>"
-                        );
-                    }
-                },
-
-            });
-            $('#name').val('');
-        });
-        $('.modal-footer').on('click', '.delete', function () {
-            $.ajax({
-                type: 'post',
-                url: '/deleteItem',
-                data: {
-                    '_token': $('input[name=_token]').val(),
-                    'id': $('.did').text()
-                },
-                success: function (data) {
-                    $('.item' + $('.did').text()).remove();
-                }
-            });
-        });
     });
+});
 
 </script>
 
@@ -304,6 +336,18 @@
 </script>
 @endif
 
+@if (Session::has('berhasil_dikeluarkan'))
+<script>
+    Swal.fire(
+        'Berhasil!',
+        'Berhasil mengeluarkan murid!',
+        'success'
+    )
+
+</script>
+@endif
+
+
 @if (Session::has('gagal_update_kuota'))
 <script>
     Swal.fire({
@@ -321,5 +365,79 @@
 
 </script>
 @endif
+
+
+@if (Session::has('berhasil_mp'))
+<script>
+    Swal.fire({
+        title: 'Berhasil!',
+        text: 'Berhasil menghapus kelas!',
+        type:'success',
+        confirmButtonText: "Mengerti",
+        confirmButtonColor: "#343a40",
+        animation: false,
+        customClass: {
+            popup: "animated jello"
+        }
+    }
+    )
+
+</script>
+@endif
+
+@if (Session::has('sudah_ada'))
+<script>
+    Swal.fire({
+        title: 'Gagal!',
+        text: 'Kelas telah diambil!',
+        type:'error',
+        confirmButtonText: "Mengerti",
+        confirmButtonColor: "#343a40",
+        animation: false,
+        customClass: {
+            popup: "animated shake"
+        }
+    }
+    )
+
+</script>
+@endif
+
+@if (Session::has('berhasil_tambah'))
+<script>
+    Swal.fire({
+        title: 'Berhasil!',
+        text: 'Kelas ditambah!',
+        type:'success',
+        confirmButtonText: "Oke",
+        confirmButtonColor: "#343a40",
+        animation: false,
+        customClass: {
+            popup: "animated jello"
+        }
+    }
+    )
+
+</script>
+@endif
+
+@if (Session::has('pelajaran_dihapus'))
+<script>
+    Swal.fire({
+        title: 'Berhasil!',
+        text: 'Kelas dihapus!',
+        type:'success',
+        confirmButtonText: "Oke",
+        confirmButtonColor: "#343a40",
+        animation: false,
+        customClass: {
+            popup: "animated jello"
+        }
+    }
+    )
+
+</script>
+@endif
+
 
 @endsection

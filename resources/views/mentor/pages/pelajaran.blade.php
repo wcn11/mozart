@@ -14,7 +14,7 @@
 
     </div>
     {{-- data-target="#modal-pelajaran" data-toggle="modal" --}}
-<!-- DataTales Example -->
+<!-- DataTales Exame -->
 <div class="card shadow mb-4 animated bounceInDown">
     <div class="card-header py-3 text-center">
         <h6 class="m-0 font-weight-bold text-primar bounce animated">Tabel pelajaran</h6>
@@ -23,43 +23,13 @@
 
             <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        @foreach ($mapel as $mpl)
-                            <a class="nav-item nav-link" id="nav-{{ $mpl->kode_mapel }}-tab" data-id="{{ $mpl->kode_mapel }}" data-toggle="tab" href="#nav-{{ $mpl->kode_mapel }}" role="tab" aria-controls="nav-{{ $mpl->kode_mapel }}"> {{ $mpl->nama_pelajaran }}</a>
+                        @foreach ($mentor->m_ke_mp as $m)
+                            <a class="nav-item nav-link" id="nav-{{ $m->kode_mentor_pelajaran }}-tab" data-id="{{ $m->kode_mentor_pelajaran }}" data-toggle="tab" href="#nav-{{ $m->kode_mentor_pelajaran }}" role="tab" aria-controls="nav-{{ $m->kode_mentor_pelajaran }}"> {{ $m->mp_ke_mapel->nama_pelajaran }}</a>
                         @endforeach
                     </div>
                   </nav>
                   <div class="tab-content" id="nav-tabContent">
-                        @foreach ($mapel as $mpl)
-                            <div class="tab-pane fade" id="nav-{{ $mpl->kode_mapel }}" role="tabpanel" aria-labelledby="nav-{{ $mpl->kode_mapel }}-tab">
 
-
-
-                                <div class="container p-3 text-center">
-                                    {{-- <a href="#" data-id="{{ $mpl->kode_mapel }}" class="btn btn-outline-danger btn-pdf"><i class="fas fa-print"></i> PDF</a>
-                                    <a href="#" data-id="{{ $mpl->kode_mapel }}" class="btn btn-outline-success btn-excel"><i class="fas fa-file-excel"></i> EXCEL</a> --}}
-                                    <button href="#" data-id="{{ $mpl->kode_mapel }}" data-nama="{{ $mpl->nama_pelajaran }}" class="btn btn-outline-danger btn-hapus-pelajaran animated bounceInUp"><i class="fas fa-trash-alt"></i> Hapus</button>
-                                    <button href="#" data-id="{{ $mpl->kode_mapel }}" data-nama="{{ $mpl->nama_pelajaran }}" data-kuota="{{ $mpl->kuota }}" data-js="{{ count($mpl->pelajaran_student) }}" class="btn btn-outline-secondary btn-edit-kuota animated bounceInUp"><i class="fas fa-edit"></i> Edit kuota</button>
-                                </div>
-
-                                <div class="table-responsive w-100 animated bounceInUp">
-                                            <table class="table table-bordered" id="tabel" width="100%" cellspacing="0">
-                                                <thead>
-                                                    <tr style="text-align:center;">
-                                                        <th>Murid</th>
-                                                        <th>Materi</th>
-                                                        <th>Soal</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr class="text-center">
-                                                        <td class="materi"></td>
-                                                        <td class="soal"> </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                            </div>
-                        @endforeach
                   </div>
 
 
@@ -78,7 +48,7 @@
                 <form class="form-update" method="post" action="#">
                     @csrf
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Kuota <span class="judul-kuota"></span> <span id="pesan_error" class="text-danger"></span></label>
+                        <label for="exameInputEmail1">Kuota <span class="judul-kuota"></span> <span id="pesan_error" class="text-danger"></span></label>
                         <input type="hidden" class="kode_mapel" >
                         <input type="hidden" class="js" >
                         <input type="number" name="kuota" class="form-control kuota" max="150">

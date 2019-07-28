@@ -23,6 +23,9 @@
   .icon-colored{
     width: 30px;
   }
+  #accordionSidebar{
+    background-image:linear-gradient(180deg,#56bb7a 10%,#1ea26e 100%)
+  }
 </style>
 @yield('scriptcss')
 <body id="page-top">
@@ -45,7 +48,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('student.dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
@@ -71,19 +74,40 @@
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-cog"></i>
-          <span>Daftar Aktivitas</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Akses data:</h6>
-            <a class="collapse-item" href="{{ route('student.materi') }}">Materi</a>
+      {{-- <li class="nav-item">
+          <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Daftar Aktivitas</span>
+          </a>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header">Akses data:</h6>
+              <a class="collapse-item" href="{{ route('student.materi') }}">Materi</a>
+            </div>
           </div>
-        </div>
-      </li>
-{{-- 
+        </li> --}}
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="{{ route('student.mentor') }}">
+
+            <span><i class="fas fa-chalkboard-teacher"></i> Mentor</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="{{ route('student.materi') }}">
+
+            <span><i class="fas fa-book-reader"></i> Materi</span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="{{ route('student.soal') }}">
+
+            <span><i class="fas fa-list-ol"></i> Daftar Soal</span>
+          </a>
+        </li>
+{{--
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pelajaran" aria-expanded="true" aria-controls="collapseTwo">
@@ -99,7 +123,7 @@
       </li> --}}
 
       <!-- Nav Item - Utilities Collapse Menu -->
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-wrench"></i>
           <span>Soal</span>
@@ -110,7 +134,7 @@
             <a class="collapse-item" href="{{ route('student.soal') }}">Daftar Soal</a>
           </div>
         </div>
-      </li>
+      </li> --}}
 
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -181,7 +205,7 @@
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::guard('student')->user()->name }}</span>
-                <img class="img-profile rounded-circle" src="{{ Auth::guard('student')->user()->foto }}">
+                <img class="img-profile rounded-circle" src="{{ '/images/'.Auth::guard('student')->user()->foto }}">
               </a>
 
               <!-- Dropdown - User Information -->
@@ -266,7 +290,7 @@
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
-  
+
   $(".btn-kirim-email").click(function() {
       var email = $("[name='email_mentor']").val();
       var token = $("[name='_token']").val()
@@ -313,7 +337,7 @@ $(function () {
   <script>
     Swal.fire({
       title: 'Belum memilih!',
-      text: "Sebelum melanjutkan, anda harus mengikuti minimal salah satu mentor",
+      html: "Sebelum melanjutkan, anda harus mengambil minimal salah satu mata pelajaran<br><hr>Pilih mentor untuk mengambil kelas",
       confirmButtonText: "Mengerti",
       confirmButtonColor: "#721c24",
       type: "warning",
@@ -331,7 +355,7 @@ $(function () {
   </script>
   @endif
 
-  
+
 
   @yield('scriptjs')
 </body>

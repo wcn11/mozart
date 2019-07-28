@@ -12,6 +12,8 @@ use App\Tes;
 use App\Soal_judul;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Session;
+use App\Mentor;
+use App\Mentor_pelajaran;
 
 class SoalController extends Controller
 {
@@ -21,7 +23,9 @@ class SoalController extends Controller
 
         $pelajaran = Pelajaran::all();
 
-        return view('mentor.pages.question.index', ['sj' => $soal_judul, 'pelajaran' => $pelajaran]);
+        $mentor = Mentor::find(Auth::guard('mentor')->user()->id_mentor);
+
+        return view('mentor.pages.question.index', ['sj' => $soal_judul, 'pelajaran' => $pelajaran, "mentor" => $mentor]);
     }
 
     public function soal_read($kode_judul_soal)
@@ -33,8 +37,6 @@ class SoalController extends Controller
         foreach ($soal as $s) {
             echo $s->soal_pilihan;
         }
-
-        // return view('mentor.pages.pertanyaan.index');
     }
 
     public function tes()
@@ -84,6 +86,8 @@ class SoalController extends Controller
             . $soal_judul_substr;
 
         $sj->kode_mapel = $request->kode_mapel;
+
+        $sj->kode_mentor_pelajaran = $request->kode_mentor_pelajaran;
 
         $sj->id_mentor = $id_mentor;
 
@@ -156,6 +160,8 @@ class SoalController extends Controller
     {
         $id = Soal_judul::find($request->id);
 
+        $mp = Mentor::find(Auth::guard('mentor')->user()->id_mentor);
+
         return response()->json($id);
     }
 
@@ -166,6 +172,12 @@ class SoalController extends Controller
 
         $sj->kode_mapel   = $r->kode_mapel_update;
         $sj->judul          = $r->judul_update;
+        $sj->kode_mentor_pelajaran          = $r->kode_mentor_pelajaran_update;
+
+        $kmp = Mentor_pelajaran::find($r->kode_mentor_pelajaran_update);
+
+        $sj->kode_mapel = $kmp->kode_mapel;
+
         $sj->jumlah_soal    = $r->jumlah_soal_update;
         $sj->tanggal_mulai  = $r->tgl_mulai_update  . " " . $r->jam_mulai_update . ":00";
         $sj->tanggal_selesai  = $r->tanggal_selesai_update . " " . $r->jam_selesai_update . ":00";
@@ -177,7 +189,7 @@ class SoalController extends Controller
         return redirect()->back();
     }
 
-    public function soal_delete($id)
+    public function hapus_soal($id)
     {
         $soal = Soal_judul::find($id);
 
@@ -186,12 +198,6 @@ class SoalController extends Controller
         Session::flash("hapus_soal");
 
         return back();
-    }
-
-
-    public function soal_judul(Request $request)
-    {
-        Soal_judul::create($request->all());
     }
 
     public function question_create(Request $request)

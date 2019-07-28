@@ -6,19 +6,19 @@
 <div class="container-fluid">
 
         <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">Daftar soal</h1>
+        {{--  <h1 class="h3 mb-2 text-gray-800">Daftar soal</h1>  --}}
         {{--  <p class="mb-4">Murid yang ada pada daftar dibawah adalah murid yang mengikuti anda dan anda dapat <span
                 class="badge badge-danger">mengeluarkan</span> murid anda.</p>  --}}
 
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-info text-center">Pilih mentor untuk melihat daftar soal</h6>
+                <h6 class="m-0 font-weight-bold text-dark text-center">Pilih mentor untuk melihat daftar soal</h6>
             </div>
             <div class="card-body container-utama overflow-auto" style="min-height:390px;">
-                <div class="row ">
+                <div class="row justify-content-center">
 
-                    
+
 
                         @foreach ($mentor->mentor as $m)
 
@@ -28,7 +28,7 @@
                                         <div class="flip-card-inner">
                                             <div class="flip-card-front">
                                                 <img class="rounded" src="{{ url('/images/'.$m->foto) }}" alt="{{ $m->name }}" style="width:100%;height:100%;">
-                                                
+
                                                 <div class="nama bg-white rounded" style="width:88%;">
                                                     <p class="text-dark text-capitalize text-left m-2">{{ $m->name }}</p>
                                                 </div>
@@ -37,12 +37,12 @@
                                     </div>
                                 </a>
                             </div>
-        
+
                         @endforeach
                     </div>
         </div>
     </div>
-    
+
     {{-- <td class="session">
             <span class="badge badge-success">Selesai</span>
         </td>
@@ -68,14 +68,14 @@
         position: absolute;
         bottom: 25%;
     }
-    
+
     .flip-card {
         background-color: transparent;
         width: 300px;
         height: 300px;
         perspective: 1000px;
     }
-    
+
     .flip-card-inner {
         position: relative;
         width: 90%;
@@ -85,7 +85,7 @@
         transform-style: preserve-3d;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     }
-    
+
     .flip-card-front,
     .flip-card-back {
         position: absolute;
@@ -93,12 +93,12 @@
         height: 100%;
         backface-visibility: hidden;
     }
-    
+
     .flip-card-front {
         background-color: #bbb;
         color: black;
     }
-    
+
     .flip-card-back {
         background-color: #2980b9;
         color: white;

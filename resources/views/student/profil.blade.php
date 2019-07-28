@@ -1,4 +1,4 @@
-@extends('student.layouts.app') 
+@extends('student.layouts.app')
 
 @section('main-content')
 <!-- Begin Page Content -->
@@ -33,18 +33,18 @@
                                         <input type="text" class="form-control" name="name"
                                             placeholder="Nama" value="{{$student->name}}" required>
                                     </div>
-                                    
+
                                     <div class="col-md-12 mb-3">
-                                        
+
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-info text-white">E-mail</span>
                                         </div>
                                         <input type="text" class="form-control" name="email"
                                             placeholder="Email anda" value="{{$student->email}}" required>
                                     </div>
-                                    
+
                                     <div class="col-md-12 mb-3">
-                                        
+
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-info text-white">Status e-mail</span>
                                         </div>
@@ -55,13 +55,13 @@
                                             <h5 class="bg-success rounded w-50 p-2 mt-2 text-white text-center">Telah di verifikasi <i class="fas fa-check-circle"></i></h5>
                                         @endif
                                     </div>
-                                    
+
                                     <div class="col-md-12 mb-3">
-                                        
+
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text bg-info text-white">Ubah password</span>
                                             </div>
-                                            
+
                                             <input type="password" style="background-color: #4dbea5;" class="password" readonly data-target=".modal-ganti-password" value="password" type="button" data-toggle="modal">
                                             <br>
                                             <em class="text-dark-50 mt-5"><sup>Klik <span class="badge badge-info text-white" data-toggle="modal" data-target=".modal-ganti-password" style="color:#4dbea5;">ubah password</span> untuk ganti password anda</sup></em>
@@ -79,7 +79,7 @@
                                             </div><br>
                                             <input type='file' name="file" value="{{$student->foto}}" class="fom-control w-100 text-center text-white" id="inputFile" style="background-color:#4dbea5; padding:20px; border-radius:25px;" />
                     {{-- {!! HTML::image($mentor->foto, 'Foto Profil', array('class' => 'rounded-circle text-center img-fluid gambar')) !!} --}}
-                                
+
                                 </div>
                                 <div class="col-md-12 p-2 text-center mt-3">
 
@@ -130,40 +130,40 @@
                 <div class="modal-header">
                     <div class="col text-center">
                         Ganti Password
-                    </div> 
+                    </div>
                 </div>
-    
+
                 <div class="card">
                     <div class="card-body">
-    
+
                     <div class="form-group row">
                         <label for="oldPassword" class="col-md-5 col-form-label text-md-right">{{ __('Password lama') }}</label>
-                        
+
                         <span class="password-salah w-100 text-danger text-center">Password yang anda masukkan saat ini salah</span>
                         <div class="col-md-12">
                             <input id="current_password" type="password" class="form-control" name="current_password" value="" required autofocus>
-                            
+
                         </div>
                     </div>
                     <hr>
                     <div class="form-group row">
                         <label for="password" class="col-md-5 col-form-label text-md-right">{{ __('Password baru') }}</label>
-    
+
                         <span class=" w-100 text-danger text-center password_sama text-center">Password baru anda tidak boleh sama dengan password lama anda!</span>
                         <span class=" password_tidak_sama w-100 text-danger password_tidak_sama text-center">Password baru anda tidak sama dengan password Konfirmasi!</span>
                         <div class="col-md-12">
                             <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password_baru" required>
                         </div>
                     </div>
-    
+
                     <div class="form-group row">
                         <label for="password-confirm" class="col-md-5 col-form-label text-md-right">{{ __('Konfirmasi password baru') }}</label>
-    
+
                         <div class="col-md-12">
                             <input id="password_confirm" type="password" class="form-control" name="password_confirmation" required>
                         </div>
                     </div>
-    
+
                     <div class="form-group row mb-0">
                         <div class="col-md-6 offset-md-6">
                             <button type="button" class="btn btn-info btn-ganti-password">
@@ -176,7 +176,7 @@
             </div>
         </div>
     </div>
-    
+
 
 <div class="modal fade modal-update" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm">
@@ -194,7 +194,7 @@
         width: 100%;
         height: auto;
         min-height: 200px;
-    }    
+    }
     .password {
 	background-color: #4dbea5;
 	border: 0px;

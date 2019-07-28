@@ -12,7 +12,7 @@ class Soal_judul extends Model
     protected $primaryKey = "kode_judul_soal";
     public $incrementing = false;
 
-    protected $fillable = ['kode_judul_soal', 'tanggal_mulai', 'tanggal_selesai', 'jumlah_soal'];
+    protected $fillable = ['kode_judul_soal', 'kode_mentor_pelajaran', 'tanggal_mulai', 'tanggal_selesai', 'jumlah_soal'];
 
     const CREATED_AT = "dibuat";
 
@@ -28,12 +28,12 @@ class Soal_judul extends Model
         return $this->belongsTo('App\Mentor', "kode_judul_soal");
     }
 
-    public function Soal()
+    public function soal_judul()
     {
-        return $this->hasMany('App\Soal', "id", "id");
+        return $this->hasMany('App\Soal', "kode_judul_soal");
     }
 
-    public function Nilai()
+    public function js_ke_n()
     {
         return $this->hasMany('App\Nilai', "kode_judul_soal");
     }
@@ -43,6 +43,16 @@ class Soal_judul extends Model
     }
 
     public function mp_js()
+    {
+        return $this->belongsTo('App\Mentor_pelajaran', "kode_mentor_pelajaran");
+    }
+
+    public function mapel_ke_soal()
+    {
+        return $this->belongsTo('App\Pelajaran', "kode_mapel");
+    }
+
+    public function mp_ke_js()
     {
         return $this->belongsTo('App\Mentor_pelajaran', "kode_mentor_pelajaran");
     }

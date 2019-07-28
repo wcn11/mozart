@@ -10,7 +10,7 @@
         <div class="clearfix">
 
             <button class="btn btn-success btn-lg mb-4 mr-4 btn-upload float-right">Update soal</button>
-        
+
         </div>
 
     <div class="col-xl-12 col-md-6 mb-4">
@@ -61,59 +61,59 @@
             <div class="card-body" id="container-soal">
                 <h6 class="m-0 font-weight-bold text-info">Form Soal </h6>
             @for ($i = 0; $i < $soal_judul->jumlah_soal; $i++)
-                
+
             <input type="hidden" name="kode_soal[]" value="{{ $soal[$i]['kode_soal'] }}">
             <input type="hidden" name="kode_judul_soal" value="{{ $soal_judul->kode_judul_soal }}">
-                
-            <br> 
-                <div class="row"> 
-                    <div class="col-md-6 grid-margin"> 
-                        <div class="form-group "> 
-                            <div class=" bg-danger pesan-error"></div> 
-                            <label for="pertanyaan-i">Pertanyaan {{ $i+1 }}<span class="text-danger control-label">*</span></label> 
-                            <input type="text" value="{{ $soal[$i]['pertanyaan']}}" required="required" name="pertanyaan[]" class="form-control" id="pertanyaan-i" aria-describedby="textHelp" placeholder="Enter text"> 
-                        </div> 
-                        <div class="form-group"> 
-                            <label for="exampleInputtext1">Pilihan ke 1   <span class="text-danger">*</span></label> 
-                            <input type="text" value="{{ $soal[$i]['pilihan1']}}" required="required" name="pilihan1[]" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" placeholder="Enter text"> 
-        
-                        </div> 
-                        <div class="form-group"> 
-                            <label for="exampleInputtext1">Pilihan ke 2   <span class="text-danger">*</span></label> 
-                            <input type="text" value="{{ $soal[$i]['pilihan2']}}" required="required" name="pilihan2[]" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" placeholder="Enter text"> 
-                        </div> 
-                        <div class="form-group"> 
-                            <label for="exampleInputtext1">Pilihan ke 3   <span class="text-danger">*</span></label> 
-                            <input type="text" value="{{ $soal[$i]['pilihan3']}}" required="required" name="pilihan3[]" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" placeholder="Enter text"> 
-                        </div> 
-                        <div class="form-group"> 
-                            <label for="exampleInputtext1">Pilihan ke 4   <span class="text-danger">*</span></label> 
-                            <input type="text" value="{{ $soal[$i]['pilihan4']}}" required="required" name="pilihan4[]" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" placeholder="Enter text"> 
-                        </div> 
-                        <div class="form-group"> 
-                            <label for="exampleInputtext1">Pilihan ke 5   <span class="text-danger">*</span></label> 
-                            <input type="text" value="{{ $soal[$i]['pilihan5']}}" required="required" name="pilihan5[]" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" placeholder="Enter text"> 
-                        </div> 
-                        <div class="form-group"> 
-                            <label for="exampleInputtext1">Pilihan Benar<span class="text-danger">*</span></label> 
-                            <select class="form-control" name="pilihan_benar[]" required="required"> 
+
+            <br>
+                <div class="row">
+                    <div class="col-md-6 grid-margin">
+                        <div class="form-group ">
+                            <div class=" bg-danger pesan-error"></div>
+                            <label for="pertanyaan-i">Pertanyaan {{ $i+1 }}<span class="text-danger control-label">*</span></label>
+                                <textarea required="required" name="pertanyaan[]" class="form-control pertanyaan" id="pertanyaan-{{ $i }}" aria-describedby="textHelp" placeholder="Enter text">{!! $soal[$i]['pertanyaan'] !!}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputtext1">Pilihan ke 1   <span class="text-danger">*</span></label>
+                            <input type="text" value="{{ $soal[$i]['pilihan1']}}" required="required" name="pilihan1[]" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" placeholder="Enter text">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputtext1">Pilihan ke 2   <span class="text-danger">*</span></label>
+                            <input type="text" value="{{ $soal[$i]['pilihan2']}}" required="required" name="pilihan2[]" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" placeholder="Enter text">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputtext1">Pilihan ke 3   <span class="text-danger">*</span></label>
+                            <input type="text" value="{{ $soal[$i]['pilihan3']}}" required="required" name="pilihan3[]" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" placeholder="Enter text">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputtext1">Pilihan ke 4   <span class="text-danger">*</span></label>
+                            <input type="text" value="{{ $soal[$i]['pilihan4']}}" required="required" name="pilihan4[]" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" placeholder="Enter text">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputtext1">Pilihan ke 5   <span class="text-danger">*</span></label>
+                            <input type="text" value="{{ $soal[$i]['pilihan5']}}" required="required" name="pilihan5[]" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" placeholder="Enter text">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputtext1">Pilihan Benar<span class="text-danger">*</span></label>
+                            <select class="form-control" name="pilihan_benar[]" required="required">
                                 @for($a = 0; $a < 5; $a++)
                                     {{--  <option value="{{ $a+1 }}"  {{ $soal[$a]['pilihan_benar'] === $a+1 ? "selected='selected'" : '' }}>Pilihan {{ $a+1 }}</option>  --}}
                                     <option value="{{ $a+1 }}" @if($soal[$i]['pilihan_benar'] == $a+1) selected="selected" @endif > Pilihan {{ $a + 1 }} </option>
                                 @endfor
-                            </select> 
-                            <p class="help-block"></p> 
-                        </div> 
-                    </div> 
-                    {{--  <div class="col-md-6 grid-margin"> 
-                        <div class="card shadow"> 
-                            <div class="card-body"> 
-                                <h4 class="card-title">Penjelasan Jawaban Benar soal ke {{$i +1}}  </h4> 
-                                <em class="text-warning">kosongkan jika tidak ada</em> 
-                                <textarea class="summernote" name="penjelasan[]"> 
-                                        </textarea> 
-                            </div> 
-                        </div> 
+                            </select>
+                            <p class="help-block"></p>
+                        </div>
+                    </div>
+                    {{--  <div class="col-md-6 grid-margin">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <h4 class="card-title">Penjelasan Jawaban Benar soal ke {{$i +1}}  </h4>
+                                <em class="text-warning">kosongkan jika tidak ada</em>
+                                <textarea class="summernote" name="penjelasan[]">
+                                        </textarea>
+                            </div>
+                        </div>
                     </div>   --}}
                 <br>
                 </div>
@@ -160,13 +160,22 @@
         $("#tanggal").val(today);
 
 
-        
-        $('.summernote').summernote({
-            height: 600, // set editor height
-            minHeight: null, // set minimum height of editor
-            maxHeight: null, // set maximum height of editor
-            focus: true // set focus to editable area after initializing summernote
-        });
+        for(var a = 0; a < $("#jumlah-soal").val(); a++){
+            $("#pertanyaan-" + a).summernote({
+                height: 250, // set editor height
+                minHeight: null, // set minimum height of editor
+                maxHeight: null, // set maximum height of editor
+                focus: true // set focus to editable area after initializing summernote
+            });
+        }
+
+
+        // $('.summernote').summernote({
+        //     height: 600, // set editor height
+        //     minHeight: null, // set minimum height of editor
+        //     maxHeight: null, // set maximum height of editor
+        //     focus: true // set focus to editable area after initializing summernote
+        // });
 
         $(".btn-upload").click(function(){
             var kosong = "";

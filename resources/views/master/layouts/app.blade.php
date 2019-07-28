@@ -18,7 +18,7 @@
   <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ URL::to('bootstrap/dist/css/bootstrap.min.css') }}" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link href="{{ asset('css/animate.css') }}" rel="stylesheet"  type="text/css">
-  
+
   <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 </head>
 <style>
@@ -30,6 +30,9 @@
     .password_sama{
         display: none;
     }
+    #accordionSidebar{
+      background-image:linear-gradient(180deg,#56bb7a 10%,#1ea26e 100%)
+      }
 </style>
 @yield('scriptcss')
 <body id="page-top">
@@ -79,7 +82,7 @@
       <!-- Nav Item - Tables -->
       <li class="nav-item">
         <a class="nav-link" href="/master/mentor">
-          
+
           <img src="https://img.icons8.com/color/48/000000/school-director.png" class="icon-colored">
           <span>Mentor</span></a>
       </li>
@@ -89,6 +92,13 @@
         <a class="nav-link" href="/master/student">
           <img src="https://img.icons8.com/color/48/000000/student-male.png" class="icon-colored">
           <span>Student</span></a>
+      </li>
+
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+        <a class="nav-link" href="/master/mapel">
+          <img src="https://img.icons8.com/officel/40/000000/courses.png" class="icon-colored">
+          <span>Mapel</span></a>
       </li>
 
       <!-- Nav Item - Tables -->
@@ -231,29 +241,30 @@
   {{-- MODAL --}}
 
 <div class="modal fade  modal-ganti-password" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="col text-center">
-                    Ganti Password
-                </div> 
+                    <h4>Ganti Password</h4>
+                </div>
+                <button class="close" data-dismiss="modal">&times;</button>
             </div>
 
             <div class="card">
                 <div class="card-body">
 
                 <div class="form-group row">
-                    <label for="oldPassword" class="col-md-5 col-form-label text-md-right">{{ __('Password lama') }}</label>
-                    
+                    <label for="oldPassword" class="col-md-12 col-form-label text-left">{{ __('Password lama') }}</label>
+
                     <span class="password-salah w-100 text-danger text-center">Password yang anda masukkan saat ini salah</span>
                     <div class="col-md-12">
                         <input id="current_password" type="password" class="form-control" name="current_password" required autofocus>
-                        
+
                     </div>
                 </div>
                 <hr>
                 <div class="form-group row">
-                    <label for="password" class="col-md-5 col-form-label text-md-right">{{ __('Password baru') }}</label>
+                    <label for="password" class="col-md-12 col-form-label text-left">{{ __('Password baru') }}</label>
 
                     <span class=" w-100 text-danger text-center password_sama text-center">Password baru anda tidak boleh sama dengan password lama anda!</span>
                     <span class=" password_tidak_sama w-100 text-danger password_tidak_sama text-center">Password baru anda tidak sama dengan password Konfirmasi!</span>
@@ -263,7 +274,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="password-confirm" class="col-md-5 col-form-label text-md-right">{{ __('Konfirmasi password baru') }}</label>
+                    <label for="password-confirm" class="col-md-12 col-form-label text-left">{{ __('Konfirmasi password baru') }}</label>
 
                     <div class="col-md-12">
                         <input id="password_confirm" type="password" class="form-control" name="password_confirmation" required>
@@ -271,7 +282,7 @@
                 </div>
 
                 <div class="form-group row mb-0">
-                    <div class="col-md-6 offset-md-6">
+                    <div class="col-md-12 offset-md-12">
                         <button type="button" class="btn btn-info btn-ganti-password">
                                     {{ __('Ganti Password') }}
                                 </button>
@@ -351,7 +362,7 @@ $.ajax({
 });
 
 </script>
-  
+
 
   @yield('scriptjs')
 </body>

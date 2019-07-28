@@ -21,15 +21,15 @@
 </style>
 	<body>
 
-		<div class="wrapper">
-			<div class="inner">
+		<div class="wrapper bg-student">
+			<div class="inner" style="position:relative; left:20%; bottom: 20px;">
 				<div class="image-holder" style="padding: 50px;">
-                    <img src="{{ url('logreg/images/admin.jpg') }}">
+                    <img src="{{ url('logreg/images/icon-student.png') }}">
         </div>
         <form method="POST" action="{{ route('student.password.request') }}" aria-label="{{ __('Login') }}">
             @csrf
 
-          
+
             <input type="hidden" name="token" value="{{ $token }}">
               <div class=" active">
                   <div class="form-group">
@@ -42,7 +42,7 @@
                           @endif
               </div>
 
-          
+
                 <div class=" ">
                     <input id="password" type="password" placeholder="Masukkan password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
@@ -80,7 +80,7 @@
   'error'
 )
         }else{
-          
+
     Swal.fire(
   'Terkirim!',
   'Email reset password telah dikirim!',

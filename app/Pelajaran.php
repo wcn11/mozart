@@ -10,15 +10,19 @@ class Pelajaran extends Model
     protected $primaryKey = "kode_mapel";
     public $incrementing = false;
 
+    const CREATED_AT = 'dibuat';
+
+    const UPDATED_AT = 'diupdate';
+
     protected $table = "pelajaran";
 
-    protected $fillable = ['kode_mapel', 'id_mentor', 'nama_pelajaran'];
+    protected $fillable = ['kode_mapel', 'id_mentor', 'nama_pelajaran', 'dibuat', 'diupdate'];
 
 
 
-    public function materi()
+    public function mapel_ke_materi()
     {
-        return $this->belongsTo('App\Materi', "kode_mapel", "kode_mapel");
+        return $this->hasMany('App\Materi', "kode_mapel");
     }
 
     public function soal()
@@ -46,9 +50,13 @@ class Pelajaran extends Model
         return $this->hasMany('App\Pelajaran_student', "kode_mapel");
     }
 
-
-    public function mentor_ke_mapel()
+    public function mp_ke_mapel()
     {
         return $this->hasMany("App\Mentor_pelajaran", "kode_mapel");
+    }
+
+    public function mapel_ke_soal()
+    {
+        return $this->hasMany("App\Soal_judul", "kode_mapel");
     }
 }

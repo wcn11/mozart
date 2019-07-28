@@ -13,6 +13,8 @@ use Yajra\DataTables\DataTables;
 use App\Mentors_student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use App\Mentor_pelajaran;
+use App\Pelajaran;
 
 class StudentController extends Controller
 {
@@ -23,15 +25,11 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $mentor_id = Auth::guard('mentor')->user()->id_mentor;
+        $mentor = Mentor::find(Auth::guard('mentor')->user()->id_mentor);
 
-        $student = Mentor::find($mentor_id)->student;
+        $mapel = Pelajaran::all();
 
-        $js = Mentors_student::where("id_mentor", $mentor_id)->get()->count();
-
-        $tanggal_follow = Mentors_student::where("id_mentor", $mentor_id)->get();
-
-        return view('mentor.pages.student.index', compact('student', "js", "tanggal_follow"));
+        return view('mentor.pages.student.index', compact('mentor', "mapel"));
     }
 
     public function getDataStudent()
@@ -44,7 +42,7 @@ class StudentController extends Controller
 
     public function unfollow($id)
     {
-        $std = Mentors_student::where("id_mentor",Auth::guard('mentor')->user()->id_mentor)->where("id_student", $id)->get();
+        $std = Mentors_student::where("id_mentor", Auth::guard('mentor')->user()->id_mentor)->where("id_student", $id)->get();
 
         $std2 = Mentors_student::find($std[0]["kode_mengikuti"]);
 
@@ -53,30 +51,47 @@ class StudentController extends Controller
         Session::flash("berhasil_unfollow", "berhasil");
 
         return back();
-
     }
 
-    public function update_kuota(Request $request){
+    public function update_kuota(Request $request)
+    {
+
         $kuota = $request->kuota;
-        
+
         $mentor = Mentor::find(Auth::guard('mentor')->user()->id_mentor);
 
         $js = Mentor::where("id_mentor", Auth::guard('mentor')->user()->id_mentor)->get();
 
-        if($kuota < count($js)){
+        if ($kuota < count($js)) {
             Session::flash("gagal_update_kuota", "gagal");
-    
+
             return back();
-        }else{
-            $mentor->kuota = $kuota;
-    
-            $mentor->update();
-    
+        } else {
+            $kmp = $request->kmp;
+
+            $kode = Mentor_pelajaran::find($kmp);
+
+            $kode->kuota = $request->kuota;
+
+            $kode->save();
+
             Session::flash("berhasil_update_kuota", "berhasil");
-    
+
             return back();
         }
+    }
 
+    public function hapus_mapel(Request $req)
+    {
+        $kmp = $req->kmp;
+
+        $mp = Mentor_pelajaran::find($kmp);
+
+        $mp->delete();
+
+        Session::flash("berhasil_mp", "berhasil");
+
+        return redirect()->back();
     }
 
 
@@ -109,18 +124,12 @@ class StudentController extends Controller
     {
 
 
-        $user_id = $req->id_mentor;
+        $std = Mentors_student::find($req->kode_mengikuti);
 
-        $mentor = Mentor::find(1);
-
-        $mentor->student()->detach($user_id);
-
-        $berhasil = array(
-            'status' => 'berhasil'
-        );
+        $std->delete();
 
         Session::flash("berhasil_dikeluarkan", 'Murid berhasil dikeluarkan');
 
-        return response()->json($berhasil);
+        return redirect()->back();
     }
 }

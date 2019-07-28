@@ -68,38 +68,38 @@
                         <div class="col-md-6 grid-margin">
                             <div class="form-group ">
                                 <div class=" bg-danger pesan-error"></div>
-                                <label for="pertanyaan">Pertanyaan ke {{ $i + 1 }}<span class="text-danger control-label">*</span></label>
-                                <input type="text" required="required" name="pertanyaan" data-id="{{ $soal[$i]['kode_soal'] }}" class="form-control pertanyaan" id="pertanyaan-{{ $i }}-{{ $soal[$i]['kode_soal'] }}" aria-describedby="textHelp" placeholder="Enter text">
+                                <label for="pertanyaan">Pertanyaan ke {{ $i + 1 }} <i class="text-success fas fa-check"></i></label>
+                                <d required="required" name="pertanyaan" data-id="{{ $soal[$i]['kode_soal'] }}" data-increment="{{ $i }}" class="form-control pertanyaan pertanyaan-{{$i}}" id="pertanyaan-{{ $i }}" aria-describedby="textHelp" placeholder="Enter text"></d>
 
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputtext1">Pilihan ke 1  <span class="text-danger">*</span></label>
+                                <label for="exampleInputtext1">Pilihan ke 1  </label>
                                 <input type="text" required="required" name="pilihan1" class="form-control pilihan1" data-id="{{ $soal[$i]['kode_soal'] }}" id="pilihan1-{{ $i }}-{{ $soal[$i]['kode_soal'] }}" aria-describedby="textHelp" placeholder="Enter text">
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputtext1">Pilihan ke 2  <span class="text-danger">*</span></label>
+                                <label for="exampleInputtext1">Pilihan ke 2  </label>
                                 <input type="text" required="required" name="pilihan2" class="form-control pilihan2" data-id="{{ $soal[$i]['kode_soal'] }}" id="pilihan2-{{ $i }}-{{ $soal[$i]['kode_soal'] }}" aria-describedby="textHelp" placeholder="Enter text">
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputtext1">Pilihan ke 3  <span class="text-danger">*</span></label>
+                                <label for="exampleInputtext1">Pilihan ke 3  </label>
                                 <input type="text" required="required" name="pilihan3" class="form-control pilihan3" data-id="{{ $soal[$i]['kode_soal'] }}" id="pilihan3-{{ $i }}-{{ $soal[$i]['kode_soal'] }}" aria-describedby="textHelp" placeholder="Enter text">
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputtext1">Pilihan ke 4  <span class="text-danger">*</span></label>
+                                <label for="exampleInputtext1">Pilihan ke 4  </label>
                                 <input type="text" required="required" name="pilihan4" class="form-control pilihan4" data-id="{{ $soal[$i]['kode_soal'] }}" id="pilihan4-{{ $i }}-{{ $soal[$i]['kode_soal'] }}" aria-describedby="textHelp" placeholder="Enter text">
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputtext1">Pilihan ke 5  <span class="text-danger">*</span></label>
+                                <label for="exampleInputtext1">Pilihan ke 5  </label>
                                 <input type="text" required="required" name="pilihan5" class="form-control pilihan5" data-id="{{ $soal[$i]['kode_soal'] }}" id="pilihan5-{{ $i }}-{{ $soal[$i]['kode_soal'] }}" aria-describedby="textHelp" placeholder="Enter text">
                             </div>
 
                             <div class="form-group">
-                                <label for="pilihan_benar">Pilihan Benar<span class="text-danger">*</span></label>
+                                <label for="pilihan_benar">Pilihan Benar</label>
                                 <select class="form-control pilihan_benar is-valid" name="pilihan_benar" data-id="{{ $soal[$i]['kode_soal'] }}" required="required">
                                     @for($a = 1; $a <= 5; $a++)
                                         <option value="{{ $a }}">Pilihan {{ $a }}</option>
@@ -123,6 +123,10 @@
     </div>
     </form>
 </div>
+<div id="editor">
+    <div id='edit' style='margin-top:30px;'>
+    </div>
+  </div>
 
 <input type="hidden" id="jumlah-soal" value="{{ $soal_judul->jumlah_soal }}">
 
@@ -138,12 +142,18 @@
         top: 0%;
         z-index: 99;
     }
+    .note-editor{
+        border: 2px solid #28a745 !important;
+    }
 </style>
 @endsection @section('scriptjs')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+
 <script>
     $(document).ready(function() {
+
+        // $(".note-editor").addClass("is-valid");
 
         Swal.fire(
         'Autosave!',
@@ -173,10 +183,10 @@
         });
 
         $(".btn-upload").click(function(){
-            
+
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Anda telah selesai?',
+                text: "Anda bisa mengedit soal pada bagian edit soal nanti!",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -190,39 +200,52 @@
             })
 
         });
-
         // start auto save !! start auto save !! start auto save !! start auto save !!
 
-        $(".pertanyaan").on("change", function(){
-            var kode_judul_soal = $("#kode_judul_soal").val();
-            var kode_soal = $(this).attr("data-id");
-            var pertanyaan = $(this).val();
-            var id = $(this).attr("id");
+        for(var i = 0; i < $("#jumlah-soal").val(); i++){
+            $(".pertanyaan-" + i ).summernote({
+                height: 250, // set editor height
+            minHeight: null, // set minimum height of editor
+            maxHeight: null, // set maximum height of editor
+            focus: true, // set focus to editable area after initializing summernote
+                callbacks: {
+                    onChange: function(e){
 
-            $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        var kode_judul_soal = $("#kode_judul_soal").val();
+                        var kode_soal = $(this).attr("data-id");
+                        var pertanyaan = $(this).summernote("code");
+                        var id = $(this).attr("id");
+                        var data_increment = $(this).attr("data-increment");
+
+
+                        $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            });
+
+                            $.ajax({
+                                type: "post",
+                                url: "{{ url('mentor/soal/autosave/pertanyaan') }}",
+                                data:{
+                                    kjs: kode_judul_soal,
+                                    ks: kode_soal,
+                                    pertanyaan: pertanyaan
+                                },
+                                success: function(hasil){
+                                    if(hasil == "berhasil"){
+                                        $("#" + id).addClass("is-valid");
+
+                                    }
+                                }
+                            });
+
                     }
-                });
+                }
+            });
+        }
 
-                $.ajax({
-                    type: "post",
-                    url: "{{ url('mentor/soal/autosave/pertanyaan') }}",
-                    data:{
-                        kjs: kode_judul_soal,
-                        ks: kode_soal,
-                        pertanyaan: pertanyaan
-                    },
-                    success: function(hasil){
-                        if(hasil == "berhasil"){
-                            $("#" + id).addClass("is-valid");
-                           
-                        }
-                    }
-                });
-        });
-
-        $(".pilihan1").on("change", function(){
+        $(".pilihan1").on("change input keyup", function(){
 
             var kode_soal = $(this).attr("data-id");
             var pilihan1 = $(this).val();

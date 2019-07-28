@@ -1,7 +1,7 @@
 @extends('master.layouts.app')
 
 @section('main-content')
-    
+
  <!-- Begin Page Content -->
 <div class="container-fluid">
 
@@ -12,8 +12,8 @@
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                    <p class="h3 mb-2 text-gray-1000 badge badge-pill badge-primary float-right">{{ $materi->pelajaran->nama_pelajaran }}</p>
-                <h5 class="m-0 font-weight-bold text-primary text-center">{{ $materi->judul_materi }}</h5>
+                    <p class="h3 mb-2 text-gray-1000 badge badge-pill badge-dark float-right">{{ $materi->pelajaran->nama_pelajaran }}</p>
+                <h5 class="m-0 font-weight-bold text-dark text-center">{{ $materi->judul_materi }}</h5>
             </div>
             <div class="card-body">
                 {!! $materi->materi !!}

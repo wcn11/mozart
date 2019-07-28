@@ -11,8 +11,8 @@
                 <p class="text-center text-danger">{{ $soal_judul->tanggal_mulai }} - {{ $soal_judul->tanggal_selesai }} </p>
                 <p class="text-capitalize text-center">{{ $soal_judul->kjs_ke_mentor[0]['name'] }}</p>
                     @for ($i = 0; $i < $soal_judul->jumlah_soal; $i++)
-        
-                    {{ $i +1 }}. {{ $soal[$i]['pertanyaan']}}
+
+                    {{ $i + 1 }}. {!! $soal[$i]['pertanyaan']!!}
                     <br><br>
                         <div class="pilihan">
                             1 .{{ $soal[$i]['pilihan1']}}
@@ -41,8 +41,8 @@
                     @endfor
                 </div>
             </div>
-        </div>       
-    </div> 
+        </div>
+    </div>
 @endsection
 
 @section('scriptcss')

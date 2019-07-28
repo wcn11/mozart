@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'Master'], function() {
+Route::group(['namespace' => 'Master'], function () {
     Route::get('/', 'HomeController@index')->name('master.dashboard');
 
     // Login
@@ -19,9 +19,9 @@ Route::group(['namespace' => 'Master'], function() {
     Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('master.password.reset');
 
     // Must verify email
-    Route::get('email/resend','Auth\VerificationController@resend')->name('master.verification.resend');
-    Route::get('email/verify','Auth\VerificationController@show')->name('master.verification.notice');
-    Route::get('email/verify/{id}','Auth\VerificationController@verify')->name('master.verification.verify');
+    Route::get('email/resend', 'Auth\VerificationController@resend')->name('master.verification.resend');
+    Route::get('email/verify', 'Auth\VerificationController@show')->name('master.verification.notice');
+    Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('master.verification.verify');
 
     Route::get("mentor", "MentorController@mentor")->name("master.mentor");
     Route::post("mentor/delete/{id}", "MentorController@delete_mentor")->name("master.delete_mentor");
@@ -35,6 +35,11 @@ Route::group(['namespace' => 'Master'], function() {
     Route::get("soal", "SoalController@index")->name("master.soal");
     Route::get("soal/lihat/{id}", "SoalController@lihat_soal")->name("master.lihat_soal");
     Route::post("soal/delete/{id}", "SoalController@delete_soal")->name("master.delete_soal");
-    
+
     Route::post('/password/change', 'HomeController@changePassword')->name('master.password.change');
+
+    Route::get('/mapel', 'HomeController@mapel')->name('master.mapel');
+    Route::post('/mapel/hapus/{id}', 'HomeController@hapus_mapel')->name('master.hapus_mapel');
+    Route::post('/mapel/tambah', 'HomeController@tambah_mapel')->name('master.tambah_mapel');
+    Route::post('/mapel/update', 'HomeController@update_mapel')->name('master.update_mapel');
 });

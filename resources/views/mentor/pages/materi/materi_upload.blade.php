@@ -10,6 +10,9 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
             <form class="form form-upload" action="{{ route('mentor.materi_upload_aksi') }}" class="col-md-12" method="POST" enctype="multipart/form-data">
+
+                @csrf
+                <input type="hidden" name="kmp" value="{{ $kmp }}">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-info">Murid</h6>
         </div>
@@ -23,7 +26,6 @@
                         </ul>
                     </div>
                     @endif
-                @csrf
                 <div class="row">
                     <div class="col-md-6 grid-margin">
                         <div class="card" style="border:0;">
@@ -40,20 +42,17 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-info text-white">Kategori pelajaran</span>
                                         </div>
-                                        <select class="custom-select" name="kode_mapel" required>
-                                            @foreach ($mapel as $mapel)
-                                            <option value="{{ $mapel->kode_mapel }}">{{ $mapel->nama_pelajaran }}</option>
-                                            @endforeach
-                                        </select>
+                                        <p> {{ $mapel->nama_pelajaran }} </p>
+                                        <input type="hidden" name="kode_mapel" value="{{ $kode_mapel }}">
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-info text-white">Cover</span>
                                         </div>
-                                        
+
                                     <div class="form-row">
                                         <input type='file' name="cover" id="cover" />
-                                        <img id="image_upload_preview"  class="rounded-circle gambar" />    
+                                        <img id="image_upload_preview"  class="rounded gambar" />
                                     </div>
                                     @if ($errors->has('cover'))
                                         <span class="invalid-feedback" role="alert">

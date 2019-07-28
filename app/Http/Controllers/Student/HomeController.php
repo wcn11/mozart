@@ -13,6 +13,8 @@ use App\Nilai;
 use App\Soal_judul;
 use Illuminate\Support\Facades\DB;
 use App\Pelajaran;
+use App\Pelajaran_student;
+use App\Mentors_student;
 
 class HomeController extends Controller
 {
@@ -36,43 +38,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $jumlah_mentor = Student::find(Auth::guard('student')->user()->id_student)->mentor;
+        $std = Mentors_student::where("id_student", Auth::guard('student')->user()->id_student)->get();
 
-        $mentor = $jumlah_mentor->count();
-        
-        $materi = 0;
+        $nilai = Nilai::where("id_student", Auth::guard('student')->user()->id_student)->get();
 
-        $soal = 0;
-        foreach($jumlah_mentor as $m){
-            $materi += count($m->materi);
-            $soal += count($m->judul_soal);
-        }
-        $nilai = Nilai::where("id_student", Auth::guard('student')->user()->id_student)->where("status", "selesai")->get();
-        
-        $total_nilai = $nilai->count();
-        
-        $kjs = [];
-        foreach($nilai as $n){
-            $kjs[] = array($n->kode_judul_soal);
-        }
-
-        // foreach($kjs as $k_key => $k_value){
-        //     $idm =  Soal_judul::find($k_value[0])->kjs_ke_mentor;
-        //     $idn =  Soal_judul::find($k_value[0])->nilai;
-        //     $sp =  Soal_judul::where("kode_judul_soal",$k_value[0])->get();
-        //     $mapel = Pelajaran::find($sp[0]["kode_mapel"]);
-
-        //     // echo $mapel->nama_pelajaran."<br>";
-        //     // echo $sl[0]["kode_mapel"]."<br>";
-        //     // for($i = 0; $i < count($idm) ;$i++){
-        //     //     echo "mapel =".$mapel->nama_pelajaran."<br>";
-        //     //     echo "soal =".$sp[0]["kode_mapel"]."<br>";
-        //     //     // echo "Mentor = " .$idm[$i]["name"]."<br>";
-        //     //     // echo "Nilai = ". $idn[$i]["kode_judul_soal"]."<br>";
-        //     // }
+        // foreach ($nilai as $n) {
+        //     echo $n->js_ke_n;
         // }
 
-        return view('student.home', compact("kjs", "mentor", "total_nilai", "materi", "soal"));
+        return view('student.home', compact("std", 'nilai', 'mentor'));
     }
     public function mentor()
     {
@@ -128,28 +102,24 @@ class HomeController extends Controller
     {
         $current_password =  Auth::guard('student')->user()->password;
 
-        if(Hash::check($request->current_password, $current_password)){
+        if (Hash::check($request->current_password, $current_password)) {
 
-            if($request->password_baru === $request->password_confirmation){
+            if ($request->password_baru === $request->password_confirmation) {
 
-                if((Hash::check($request->password_baru, $current_password))){
+                if ((Hash::check($request->password_baru, $current_password))) {
                     return array("status_password" => "password_sama_dengan_lama"); //benars
-                }else{
+                } else {
                     $user_id = Auth::guard('student')->user()->id_student;
                     $user = Student::find($user_id);
                     $user->password = Hash::make($request->password_baru);
                     $user->save();
                     return array("status_password" => "berhasil");
                 }
-
-            }else{
+            } else {
                 return array("status_password" => "konfirmasi_tidak_sama");
             }
-            
-        }else{
+        } else {
             return array("status_password" => "salah");
         }
-
     }
 }
-

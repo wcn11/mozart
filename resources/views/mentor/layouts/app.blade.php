@@ -22,17 +22,22 @@
 
     @yield('scriptcss')
 </head>
+<style>
+    #accordionSidebar{
+background-image:linear-gradient(180deg,#56bb7a 10%,#1ea26e 100%)
+}
+</style>
 <body id="page-top">
-  @if(Session::has("belum_verifikasi"))
+    @if(Session::has("belum_verifikasi"))
     <div class="alert alert-danger alert-dismissible fade show mb-0 text-center alert-konfirmasi" role="alert">
         <strong>E-mail belum dikonfirmasi!</strong> Anda Harus Segera Mengkonfirmasi Alamat Email.
         <a href="javascript:void(0)" class="font-weight-bold text-dangee btn-kirim-email">Kirim ulang</a> E-mail Konfirmasi.
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true">&times;</span>
         </button> @csrf
         <input type="hidden" name="email_mentor" value="{{ Auth::guard('mentor')->user()->email }}">
     </div>
-  @endif
+    @endif
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -52,7 +57,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="{{ route('mentor.student') }}">
+                <a class="nav-link" href="{{ route('mentor.dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -66,7 +71,7 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            {{--  <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Daftar Aktivitas</span>
@@ -92,10 +97,10 @@
                         <a class="collapse-item" href="{{ route('mentor.soal') }}">Daftar Soal</a>
                     </div>
                 </div>
-            </li>
+            </li>  --}}
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
+            {{--  <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pelajaran" aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Kategori & Pelajaran</span>
@@ -106,6 +111,38 @@
                         <a class="collapse-item" href="{{ route('mentor.mapel') }}">Pelajaran</a>
                     </div>
                 </div>
+            </li>  --}}
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('mentor.mapel') }}">
+
+                    <span><i class="fas fa-atlas"></i> Daftar Pelajaran</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('mentor.soal') }}">
+
+                    <span><i class="fas fa-list-ol"></i> Daftar Soal</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('mentor.student') }}">
+
+                    <span><i class="fas fa-user-graduate"></i> Daftar Murid</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('mentor.materi') }}">
+
+                    <span><i class="fas fa-book-reader"></i> Materi</span>
+                </a>
             </li>
 
             <!-- Divider -->
@@ -229,7 +266,7 @@
 
     <form class="form-logout" action="{{ route('mentor.logout') }}" method="POST">
         @csrf
-    </form>    
+    </form>
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -300,7 +337,7 @@
                 }
             })
         });
-        
+
     </script>
 
 

@@ -18,13 +18,16 @@
         from {background-position:left;}
         to {background-position:right;}
     }
+	/* .bg-image{
+		background-image: url();
+	} */
 </style>
 	<body>
 
-		<div class="wrapper">
-			<div class="inner">
+		<div class="wrapper bg-mentor">
+			<div class="inner" style="position:relative; left:20%;">
 				<div class="image-holder" style="padding: 50px;">
-                    <img src="{{ url('logreg/images/admin.jpg') }}">
+                    <img src="{{ url('logreg/images/icon-mentor.jpg') }}" style="width: 700px; height: 300px;">
 				</div>
                 <form method="POST" class="login100-form validate-form" action="{{ route('mentor.login') }}" aria-label="{{ __('Login') }}">
                     @csrf
@@ -59,11 +62,12 @@
 									Lupa password
 									<i class="fa fa-long-arrow-right m-l-5"></i>
 								</a>
-								
+
 								{{-- <a href="{{ route('login.mentor.provider', 'google') }}" class="btn btn-danger">{{ __('Google Sign in') }}</a>
 								<a href="{{ route('login.mentor.provider', 'facebook') }}" class="btn btn-danger">{{ __('Facebook Sign in') }}</a> --}}
 					</div>
-					
+
+					<p style="padding:10px;text-align:right;">Seorang student ?<a href="{{ route('student.login') }}"> klik disini</a></p>
 				</form>
 			</div>
 		</div>

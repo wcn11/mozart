@@ -21,10 +21,10 @@
 </style>
 	<body>
 
-		<div class="wrapper">
-			<div class="inner">
+		<div class="wrapper bg-mentor">
+			<div class="inner" style="position:relative; left:20%;">
 				<div class="image-holder" style="padding: 50px;">
-                    <img src="{{ url('logreg/images/admin.jpg') }}">
+						<img src="{{ url('logreg/images/icon-mentor.jpg') }}" style="width: 700px; height: 300px;">
 				</div>
                 <form method="POST" action="{{ route('mentor.register') }}" aria-label="{{ __('Register') }}">
                     @csrf
@@ -58,7 +58,7 @@
 					</div>
 					<div class="form-holder">
 							<input id="password-confirm" type="password" placeholder="Password Confirmation" class="form-control" name="password_confirmation" required>
-							
+
 
 							@if ($errors->has('password'))
 								<span class="invalid-feedback" role="alert">

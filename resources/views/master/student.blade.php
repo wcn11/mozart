@@ -1,49 +1,38 @@
 @extends('master.layouts.app')
 
 @section('main-content')
-    
-    <div class="container">
+
+    <div class="container-fluid">
         <div class="row">
 
                 <div class="col-md-12 m-2">
-
+                        <h2 class="text-center">Daftar Seluruh Student</h2>
                         <div class="card w-100 text-white border-0" style="">
-                            <div class="card-body" style="background-color:#53d3e8;border-radius:10px;">
-                    
+                            <div class="card-body" style="border:1px solid green;border-radius:10px;">
+
                                 <div class="input-group-prepend w-100 mb-2">
                                     <span class="input-group-text bg-dark text-white label-card">
                                                         <img src="https://img.icons8.com/color/48/000000/student-male.png" class="icon-colored"> Student</span>
                                 </div><br>
-                                <table id="tabel" class="table table-striped table-bordered table-hover table-borderless" style="width:100%">
-                                    <thead class="text-white">
-                                        <tr style="background-color:#0a336b;" class="text-center">
+                                <table id="tabel" class="table table-striped table-bordered table-hover table-bordered" style="width:100%">
+                                    <thead class="text-dark">
+                                        <tr" class="text-center">
                                             <th>Profil</th>
                                             <th>ID Student</th>
                                             <th>Nama</th>
                                             <th>Email</th>
-                                            <th>Mapel</th>
                                             <th>Tanggal Daftar</th>
                                             <th>Mentor</th>
                                             <th>Pilihan</th>
-                                        </tr>
+                                        </tr">
                                     </thead>
-                                    <tbody class="text-white">
+                                    <tbody class="text-dark">
                                         @foreach($student as $s)
                                         <tr>
-                                            <td class="w-25"><img src="{{ url("images/".$s->foto) }}" class="profil rounded"></td>
+                                            <td class="w-25"><img src="{{ url('/images/'.$s->foto) }}" class="profil rounded"></td>
                                             <td>{{ $s->id_student }}</td>
                                             <td>{{ $s->name }}</td>
                                             <td>{{ $s->email }}</td>
-                                            <td>
-                                                <ul>
-                                                    @foreach ($s->mentor as $m1)
-                                                        {{-- {{ $p->pelajaran }} --}}
-                                                        @foreach ($m1->pelajaran as $p)
-                                                            <li>{{ $p->nama_pelajaran }}</li>
-                                                        @endforeach
-                                                    @endforeach
-                                                </ul>
-                                            </td>
                                             <td>{{ $s->tanggal_daftar }}</td>
                                             <td>
                                                 <ul>
@@ -66,8 +55,8 @@
                                 </table>
                             </div>
                         </div>
-                    
-                    
+
+
                     </div>
 
         </div>
@@ -92,7 +81,7 @@
             $('#tabel').DataTable();
             $('#tabel_std').DataTable();
         } );
-        
+
         $(".btn-hapus").click(function(){
             var id = $(this).attr("data-id");
             Swal.fire({

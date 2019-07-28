@@ -21,7 +21,7 @@
             <div class="card-body">
                 @foreach($soal as $s)
                 <input type="hidden" name="kode_soal" value="{{ $s->kode_soal }}">
-                {{ $soal->currentPage() }}. {{ $s->pertanyaan }} <br>
+                {{ $soal->currentPage() }}. {!! $s->pertanyaan !!} <br>
                     <div class="form-check form-soal" data-link="{{ route('student.soal_update', $s->kode_judul_soal) }}">
                         <input class="form-check-input jawaban1" data-param="{{ Crypt::encrypt($soal_judul->kode_judul_soal) }}" type="radio" name="jawaban" id="exampleRadios1" value="1">
                             <label class="form-check-label" for="exampleRadios1">
@@ -85,12 +85,12 @@
 
         $(".belum-memilih").hide();
 
-        
+
         $(".jawaban1").click(function(){
             jawaban1 = $(this).val();
             $(".belum-memilih").hide();
             var param = $(this).attr("data-param");
-            
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -104,10 +104,10 @@
                     jawaban: jawaban1,
                     kode_soal: $("[name='kode_soal']").val(),
                     kode_judul_soal: $("[name='kode_judul_soal']").val(),
-                    
+
                 },
                 success: function(hasil1){
-                    
+
                     if(hasil1.telah_lewat == "lewat"){
                         window.location = "{{ route('student.soal') }}";
                     }else if(hasil1.telah_selesai == "selesai"){
@@ -136,7 +136,7 @@
                     jawaban: jawaban2,
                     kode_soal: $("[name='kode_soal']").val(),
                     kode_judul_soal: $("[name='kode_judul_soal']").val(),
-                    
+
                 },
                 success: function(hasil2){
                     if(hasil2.telah_lewat == "lewat"){
@@ -164,7 +164,7 @@
                     jawaban: jawaban3,
                     kode_soal: $("[name='kode_soal']").val(),
                     kode_judul_soal: $("[name='kode_judul_soal']").val(),
-                    
+
                 },
                 success: function(hasil3){
                     if(hasil3.telah_lewat == "lewat"){
@@ -192,7 +192,7 @@
                     jawaban: jawaban4,
                     kode_soal: $("[name='kode_soal']").val(),
                     kode_judul_soal: $("[name='kode_judul_soal']").val(),
-                    
+
                 },
                 success: function(hasil4){
                     if(hasil4.telah_lewat == "lewat"){
@@ -222,7 +222,7 @@
                     jawaban: jawaban5,
                     kode_soal: $("[name='kode_soal']").val(),
                     kode_judul_soal: $("[name='kode_judul_soal']").val(),
-                    
+
                 },
                 success: function(hasil5){
                     if(hasil5.telah_lewat == "lewat"){
@@ -275,10 +275,11 @@
     });
 </script>
 
-@if(Session::get('jawaban'))
+@if(Session::has('jawaban'))
 <script>
     var jawaban = {{ Session::get('jawaban') }};
     $(".jawaban" + jawaban).attr("checked", "checked");
+
 </script>
 @endif
 

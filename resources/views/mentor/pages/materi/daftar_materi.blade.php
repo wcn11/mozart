@@ -11,89 +11,92 @@
             class="badge badge-danger">mengeluarkan</span> murid anda.</p>
     <div class="col text-right mb-3 mt-3">
 
-        <a href="{{ route('mentor.materi_upload') }}" class="btn btn-dark"> Tambah materi</a>
+
     </div>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Murid</h6>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive w-100">
-                <table class="table table-bordered" id="tabel" width="100%" cellspacing="0">
-                    <thead>
-                        <tr style="text-align:center;">
-                            <th>Judul Materi</th>
-                            <th>Materi</th>
-                            <th>Pelajaran</th>
-                            <th>Dibuat</th>
-                            <th>Terakhir Update</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if(empty($materi))
-                        <tr>
-                            <td colspan="6" style="text-align:center;">Anda belum membuat materi</td>
-                        </tr>
-                        @else
-                        @foreach ($materi as $m)
-                        <tr style="text-align:center;">
-                            <td style="width: 35%; text-align:left;">{{ $m->judul_materi }}</td>
-                            <td>
-                                <button class="btn  btn-dark btn-sm btn-lihat" data-judul="{{ $m->judul_materi }}"
-                                    data-materi="{{ $m->materi }}">Lihat Materi</button> |
-                                    <?php $id = Crypt::encrypt($m->kode_materi); ?>
-                                    <a class="btn  btn-success btn-sm" href="{{ action('Mentor\MateriController@downloadPDF', $id) }}">Download Materi (PDF)<br><sup>Video tidak akan tampil</sup></a>
-                            </td>
-                            <td>{{ $m->pelajaran->nama_pelajaran }}</td>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    @empty($mentor->m_ke_mp->count())
+                        Belum membuat mata pelajaran
+                    @else
+                        @foreach($mentor->m_ke_mp as $m)
+                            <a class="nav-item nav-link" id="nav-{{ $m->kode_mentor_pelajaran }}-tab" data-toggle="tab" href="#nav-{{ $m->kode_mentor_pelajaran }}" role="tab" aria-controls="nav-{{ $m->kode_mentor_pelajaran }}" aria-selected="true">{{ $m->mp_ke_mapel->nama_pelajaran }}</a>
+                        @endforeach
+                    @endempty
+                </div>
+            </nav>
 
-                            <td>{{ $m->dibuat }}</td>
-                            <td> {{ $m->diupdate }}</td>
-                            <td>
-                                <?php $id = Crypt::encrypt($m->kode_materi); ?>
-                                <div class="btn-group dropdown">
-                                    <button class="btn btn-outline-dark dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"><i class="fas fa-cogs"></i></button>
-                                    <div class="dropdown-menu shadow text-left rounded" style="background:mintcream;">
-                                        <div>
-                                                <li class="p-2 container-hapus btn-hapus" data-id="{{ $m->kode_materi }}">
-                                                    <a href="javascript:void(0)" class="text-decoration-none">
-                                                        <i class="fas fa-trash-alt btn btn-danger btn-md rounded-circle"></i>
-                                                        <strong class="text-danger">hapus</strong>
-                                                    </a>
-                                                    <form class="form-hapus-{{ $m->kode_materi }}" action="{{ url('mentor/materi/delete', $id) }}" method="post">
+            <input type="hidden" value="{{ $mentor->m_ke_mp->count() }}" name="jumlah_materi">
+            <div class="tab-content" id="nav-tabContent">
+                @foreach ($mentor->m_ke_mp as $m_key => $m_value)
+                    <div class="tab-pane fade p-2" id="nav-{{ $m_value->kode_mentor_pelajaran }}" role="tabpanel" aria-labelledby="nav-{{ $m_value->kode_mentor_pelajaran }}-tab">
+                        <div class="w-100 text-center m-2">
+                            <form action="{{ route('mentor.tambah_materi') }}" class="form" method="get">
+                                    <input type="hidden" name="kode_mapel" value="{{ $m_value->kode_mapel }}">
+                                    <input type="hidden" name="kmp" value="{{ $m_value->kode_mentor_pelajaran }}">
+                                {{-- <input type="hidden" name="kmp" value="{{  }}"> --}}
+                                <button type="submit" class="btn btn-dark text-right"><i class="fas fa-plus"></i> Tambah materi</button>
+                            </form>
+                            {{--  <a href="{{ route('mentor.tambah_materi') }}" class="btn btn-dark text-right"><i class="fas fa-plus"></i> Tambah materi</a>  --}}
+                        </div>
+
+                            <div class="table-responsive w-100">
+                                <table class="table table-bordered" id="tabel-{{ $m_key }}" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr style="text-align:center;">
+                                            <th>Cover</th>
+                                            <th>Judul Materi</th>
+                                            <th>Materi</th>
+                                            <th>Pelajaran</th>
+                                            <th>Dibuat</th>
+                                            <th>Terakhir Update</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($m_value->mp_ke_materi as $m2)
+                                            <tr class="text-center">
+                                                <td>
+                                                    <div class="p-1 cover">
+                                                        <img src="{{ url('/images/cover_materi/'.$m2->cover) }}" class="gambar border-secondary border w-100 border-0">
+                                                    </div>
+                                                </td>
+                                                <td>{{ $m2->judul_materi }}</td>
+                                                <td>
+                                                    <button class="btn btn-info btn-lihat" data-id="{{ $m2->kode_materi }}"><i class="fas fa-eye"></i> Lihat materi</button>
+                                                    <div class="m-1"></div>
+                                                    <a href="{{ route('mentor.download_materi', $m2->kode_materi) }}" target="_blank" class="btn btn-success btn-cetak"><i class="fas fa-file-pdf"></i> Cetak Materi<br><small>Video tidak akan tampil</small></a>
+                                                </td>
+                                                <td>{{ $m2->mapel_ke_materi->nama_pelajaran }}</td>
+                                                <td>{{ $m2->dibuat }}</td>
+                                                <td>{{ $m2->diupdate }}</td>
+                                                <td>
+                                                    <div class="p-1">
+                                                        <a class="btn btn-warning" href="{{ route('mentor.edit_materi', $m2->kode_materi) }}"><i class="fas fa-edit"></i> edit</a>
+                                                        <button class="btn btn-danger btn-hapus" data-id="{{ $m2->kode_materi }}"><i class="fas fa-edit"></i> hapus</button>
+                                                    </div>
+                                                    <form class="form-hapus-{{ $m2->kode_materi }}" action="{{ route('mentor.hapus_materi') }}" method="post">
                                                         @csrf
+                                                        <input type="hidden" name="kode_materi">
                                                     </form>
-                                                </li>
-                                                <li class="p-2 container-edit btn-edit" data-id="{{  $m->kode_materi }}">
-                                                    <a href="javascript:void(0)" class="text-decoration-none">
-                                                        <i class="fas fa-edit btn btn-warning btn-md rounded-circle text-white"></i>
-                                                        <strong class="text-warning">edit</strong>
-                                                    </a>
-                                                    <form class="form-edit-{{  $m->kode_materi }}" action="{{ route('mentor.materi_edit', $id) }}" method="get">
-                                                        @csrf
-                                                    </form>
-                                                </li>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    @endforeach
             </div>
-            </tr>
-            @endforeach
-            @endif
-            </tbody>
-            </table>
-        </div>
+
     </div>
-</div>
 </div>
 
 {{--  MODAL  --}}
 
-<div class="modal fade bd-example-modal-xl modal-materi" tabindex="-1" role="dialog"
-    aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+<div class="modal fade modal-materi" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="">
@@ -104,18 +107,18 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body isi-materi">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark btn-tutup" data-dismiss="modal">Tutup</button>
-               
+
             </div>
         </div>
     </div>
 </div>
 
 
-      
+
 
 @endsection
 
@@ -126,6 +129,14 @@
     .container-hapus:hover, .container-edit:hover{
         background-color: ivory;
         cursor: pointer;
+    }
+
+    .gambar{
+        width: 60%;
+        text-align: center !important;
+    }
+    .sorting_1{
+        width: 20%;
     }
 </style>
 
@@ -142,9 +153,58 @@
 <script>
     $(document).ready(function () {
 
+        $(".nav-tabs .nav-item:first-child").addClass("active");
+        $(".tab-content .tab-pane:first-child").addClass("active show");
+
+        function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#image_upload_preview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#inputFile").change(function() {
+        readURL(this);
+    });
+
+
+        for(var c = 0; c < $("[name='jumlah_materi']").val(); c++){
+            $("#tabel-" + c).DataTable();
+        }
+
+        $(".btn-lihat").click(function(){
+            var id = $(this).attr("data-id");
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                type: "post",
+                url: "{{ url('mentor/materi/ambildata') }}" + "/" + id,
+                data: {
+                    kode_materi: id
+                },
+                success:function(hasil){
+                    $(".modal-title").text("");
+                    $(".isi-materi").html("");
+                    $(".modal-title").text(hasil.judul_materi);
+                    $(".isi-materi").html(hasil.materi);
+                }
+            });
+        });
+
         $(".btn-hapus").click(function(){
 
             var id = $(this).attr("data-id");
+            $("[name='kode_materi']").val(id);
 
             Swal.fire({
                 title: 'Apakah anda yakin?',

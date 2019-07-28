@@ -35,7 +35,7 @@ class MateriController extends Controller
     {
         $id_student = Auth::guard('student')->user()->id_student;
 
-        $std= Student::find($id_student);
+        $std = Student::find($id_student);
 
         // foreach($std->mentor as $m){
         //     echo "nama mentor = ". $m->name. "<br>";
@@ -53,8 +53,8 @@ class MateriController extends Controller
 
     public function daftar_materi($id)
     {
-        $materi = Materi::where("id_mentor", $id)->get();
+        $mentor = Mentor::find($id);
 
-        return view('student.daftar_materi', compact('materi'));
+        return view('student.daftar_materi', compact('mentor'));
     }
 }

@@ -19,7 +19,7 @@
             <input type="hidden" name="kode_judul_soal" value="{{ $soal_judul->kode_judul_soal }}">
             <div class="card-body">
                 <input type="hidden" name="kode_soal" value="{{ $soal->kode_soal }}">
-                {{ $nomor }}. {{ $soal->pertanyaan }}<br>
+                {{ $nomor }}. {!! $soal->pertanyaan !!}<br>
                     <div class="form-check form-soal" data-link="{{ route('student.soal_update', $soal->kode_soal) }}">
                         @if ($hasil[0]['jawaban'] == 1)
                             <input class="form-check-input jawaban1 jawaban" data-param="{{ Crypt::encrypt($soal_judul->kode_judul_soal) }}" type="radio" name="jawaban" checked id="exampleRadios1" value="1">
@@ -85,7 +85,7 @@
 @section('scriptjs')
 <script>
     $(document).ready(function(){
-        
+
         $(".jawaban1").click(function(){
             jawaban1 = $(this).val();
             var param = $(this).attr("data-param");

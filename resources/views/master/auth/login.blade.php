@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>RegistrationForm_v4 by Colorlib</title>
+		<title>Master | Mozart E-learning</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<!-- STYLE CSS -->
@@ -31,7 +31,7 @@
 					<h3>Login Master</h3>
 					<div class="form-holder active">
                         <input type="text" placeholder="username" name="username" class="form-control">
-                        
+
                         @if ($errors->has('email'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('email') }}</strong>
@@ -49,7 +49,7 @@
 					<div class="checkbox">
 					</div>
 					<div class="form-login">
-						<button>Login</button>
+						<button><i class="fas fa-sign-in"></i> Login</button>
 					</div>
 				</form>
 			</div>
